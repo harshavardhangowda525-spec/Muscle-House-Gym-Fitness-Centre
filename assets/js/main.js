@@ -104,6 +104,18 @@
     } else { loadMap(); }
   }
 
+  /* ---------- Plan buttons prefill the enquiry message ---------- */
+  document.querySelectorAll("[data-plan]").forEach(function (a) {
+    a.addEventListener("click", function () {
+      var box = document.getElementById("f-msg");
+      if (!box) return;
+      var line = "Interested in: " + a.getAttribute("data-plan");
+      var rest = box.value.replace(/^Interested in: .*(\n|$)/, "");
+      box.value = line + (rest ? "\n" + rest : "");
+      box.dispatchEvent(new Event("input"));
+    });
+  });
+
   /* ---------- "Enquire now" links focus the first form field ---------- */
   document.querySelectorAll('a[href="#enquire"]').forEach(function (a) {
     a.addEventListener("click", function () {

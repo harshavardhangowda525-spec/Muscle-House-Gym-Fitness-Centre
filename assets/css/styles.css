@@ -173,7 +173,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .wordmark--lg .wordmark__mark { width: 52px; height: 52px; font-size: 1.35rem; }
 
 .nav__links { margin-left: auto; display: none; }
-.nav__links ul { display: flex; gap: 2.2rem; }
+.nav__links ul { display: flex; gap: clamp(1.2rem, 2vw, 2.2rem); }
 .nav__links a {
   position: relative; text-decoration: none; font-size: .78rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: #D9D7D2;
   padding-block: .5rem;
@@ -376,6 +376,38 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .feature__icon { width: 48px; height: 48px; fill: none; stroke: var(--lime); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; margin-bottom: 2rem; }
 .feature h3 { font-family: var(--font-display); font-weight: 400; font-size: 1.6rem; line-height: 1.05; text-transform: uppercase; margin-bottom: .8rem; }
 .feature p { color: var(--steel); font-size: .93rem; }
+
+/* ---------- Membership ---------- */
+.plans { display: grid; gap: 1.25rem; }
+@media (min-width: 680px) { .plans { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1120px) { .plans { grid-template-columns: repeat(4, 1fr); } }
+.plan {
+  position: relative; display: flex; flex-direction: column; padding: 2.2rem 1.8rem 1.8rem;
+  background: linear-gradient(180deg, #171717, #0e0e0e);
+  border: 1px solid var(--line-strong); border-radius: var(--radius);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
+  transition: transform .45s var(--ease), border-color .45s var(--ease), box-shadow .45s var(--ease);
+}
+.plan:hover { transform: translateY(-6px); border-color: rgba(198,255,0,.45); box-shadow: 0 30px 60px -30px rgba(0,0,0,.9); }
+.plan--featured { border-color: var(--lime); background: radial-gradient(120% 60% at 50% 0%, rgba(198,255,0,.1), transparent 60%), linear-gradient(180deg, #181a12, #0e0e0e); }
+.plan__badge {
+  position: absolute; top: -1px; right: 1.5rem; padding: .35rem .7rem;
+  background: var(--lime); color: var(--obsidian); border-radius: 0 0 var(--radius) var(--radius);
+  font-size: .66rem; font-weight: 800; letter-spacing: .18em; text-transform: uppercase;
+}
+.plan__name { font-family: var(--font-display); font-weight: 400; font-size: 1.8rem; line-height: 1; text-transform: uppercase; }
+.plan__price { margin-top: 1.4rem; font-family: var(--font-display); font-size: clamp(2.8rem, 4vw, 3.4rem); line-height: 1; display: flex; align-items: baseline; flex-wrap: wrap; gap: .1rem; }
+.plan__currency { font-size: .55em; color: var(--lime); margin-right: .1rem; }
+.plan__period { flex-basis: 100%; margin-top: .6rem; font-family: var(--font-body); font-size: .85rem; font-weight: 600; color: var(--steel); }
+.plan__per { margin-top: .5rem; font-size: .78rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--lime); }
+.plan__note { margin-top: 1rem; color: var(--steel); font-size: .93rem; }
+.plan__features { margin: 1.5rem 0 2rem; padding-top: 1.25rem; border-top: 1px solid var(--line); display: grid; gap: .7rem; font-size: .93rem; }
+.plan__features li { position: relative; padding-left: 1.6rem; }
+.plan__features li::before { content: ""; position: absolute; left: 0; top: .45em; width: 10px; height: 6px; border-left: 2px solid var(--lime); border-bottom: 2px solid var(--lime); transform: rotate(-45deg); }
+.plan .btn { margin-top: auto; }
+.plans__foot { margin-top: 2rem; color: var(--steel); }
+.plans__foot a { color: var(--offwhite); font-weight: 700; }
+.plans__foot a:hover { color: var(--lime); }
 
 /* ---------- 6. Reviews ---------- */
 .reviews__head { display: grid; gap: 2rem; align-items: end; margin-bottom: clamp(2.5rem, 6vw, 4rem); }
