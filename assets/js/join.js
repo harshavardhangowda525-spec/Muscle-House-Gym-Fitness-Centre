@@ -156,21 +156,27 @@
     var ok = setError("j-name",
       !name ? "Please enter your full name." :
       name.length < 2 ? "Name should be at least 2 characters." :
-      !/^[\p{L}][\p{L}\s.'-]*$/u.test(name) ? "Please use letters only." : "");
+      !/\p{L}/u.test(name) || /[<>{}]/.test(name) ? "Please enter your real name." : "");
     ok = setError("j-phone", phone ? "" : "Enter a valid 10-digit Indian mobile number.") && ok;
     if (!ok) { $(".has-error input").focus(); return; }
 
     state.name = name; state.phone = phone;
     var p = state.plan;
-    var link = MH.upiUrl({
-      vpa: settings.upi_id,
-      payee: settings.payee_name,
-      amount: p.price,
-      note: "Muscle House " + p.name + " - " + name
-    });
-    MH.renderQr($("[data-j-qr]"), link);
-    $("[data-j-amount2]").textContent = MH.inr(p.price);
-    $("[data-j-app]").href = link;
+    try {
+      var link = MH.upiUrl({
+        vpa: settings.upi_id,
+        payee: settings.payee_name,
+        amount: p.price,
+        note: "Muscle House " + p.name + " - " + name
+      });
+      MH.renderQr($("[data-j-qr]"), link);
+      $("[data-j-amount2]").textContent = MH.inr(p.price);
+      $("[data-j-app]").href = link;
+    } catch (err) {
+      if (window.console) console.error(err);
+      setError("j-phone", "Couldn't show the payment QR. Please refresh the page (Ctrl+Shift+R) and try again.");
+      return;
+    }
     showStep(2);
   });
 

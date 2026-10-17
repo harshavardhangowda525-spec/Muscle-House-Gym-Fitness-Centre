@@ -146,7 +146,7 @@
       v = v.trim();
       if (!v) return "Please enter your full name.";
       if (v.length < 2) return "Name should be at least 2 characters.";
-      if (!/^[\p{L}][\p{L}\s.'-]*$/u.test(v)) return "Please use letters only.";
+      if (!/\p{L}/u.test(v) || /[<>{}]/.test(v)) return "Please enter your real name.";
       return "";
     },
     phone: function (v) {
