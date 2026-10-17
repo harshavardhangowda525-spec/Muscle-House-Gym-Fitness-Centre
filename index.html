@@ -577,15 +577,8 @@
     <section class="join__step" data-step="2" hidden>
       <div class="join__pay">
         <div class="join__qr" data-j-qr></div>
-        <div class="join__payinfo">
-          <p class="join__scan">Scan with any UPI app: GPay, PhonePe, Paytm or your bank app.</p>
-          <dl class="join__dl">
-            <div><dt>Pay to</dt><dd data-j-payee></dd></div>
-            <div><dt>UPI ID</dt><dd><span data-j-vpa></span> <button class="join__copy" type="button" data-j-copy>Copy</button></dd></div>
-            <div><dt>Amount</dt><dd data-j-amount2></dd></div>
-          </dl>
-          <a class="btn btn--ghost btn--block join__app" data-j-app href="#">Open UPI app</a>
-        </div>
+        <p class="join__scan">Scan to pay <strong data-j-amount2></strong> with GPay, PhonePe, Paytm or any UPI app</p>
+        <a class="btn btn--ghost btn--block join__app" data-j-app href="#">Open UPI app</a>
       </div>
       <form class="join__form" data-join-pay novalidate>
         <div class="field">

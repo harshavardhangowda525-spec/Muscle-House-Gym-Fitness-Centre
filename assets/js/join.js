@@ -169,20 +169,12 @@
       note: "Muscle House " + p.name + " - " + name
     });
     MH.renderQr($("[data-j-qr]"), link);
-    $("[data-j-payee]").textContent = settings.payee_name;
-    $("[data-j-vpa]").textContent = settings.upi_id;
     $("[data-j-amount2]").textContent = MH.inr(p.price);
     $("[data-j-app]").href = link;
     showStep(2);
   });
 
   $("[data-j-back]").addEventListener("click", function () { showStep(1); });
-
-  $("[data-j-copy]").addEventListener("click", function (e) {
-    var btn = e.currentTarget;
-    var done = function () { btn.textContent = "Copied"; window.setTimeout(function () { btn.textContent = "Copy"; }, 1600); };
-    if (navigator.clipboard) navigator.clipboard.writeText(settings.upi_id).then(done, function () {});
-  });
 
   /* Step 2 → 3: store the request as pending */
   $("[data-join-pay]").addEventListener("submit", function (e) {
