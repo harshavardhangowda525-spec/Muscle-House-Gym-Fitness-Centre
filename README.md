@@ -62,6 +62,8 @@ Aim for about 1600px on the long edge, WebP at roughly 70–80% quality. If you 
 
 ## Content accuracy
 
-Only verified facts are used: name, address, phone, the 4.4/5 Google rating from 105 reviews, the listed 10:00 PM closing time, and the three supplied review quotes. Opening hours, prices, trainer credentials, amenities and statistics are deliberately left out. The structured data contains no hours or rating markup.
+Only verified facts are used: name, address, phone, the 4.4/5 Google rating from 105 reviews, the listed 10:00 PM closing time, and the three supplied review quotes. Opening hours, trainer credentials, amenities and statistics are deliberately left out.
+
+**Membership prices are placeholders.** The Membership section shows sample prices (₹2,000 / ₹5,500 / ₹9,500 / ₹16,000), labelled on the page as "sample prices … to be confirmed". Before launch, edit the prices, per-month figures and "Save ₹…" lines in the `MEMBERSHIP` block of `index.html` to the gym's real rates, then delete the `.plans__disclaimer` note. The structured data contains no hours or rating markup.
 
 The "Read all reviews" and Maps links use a Google Maps **search** for the exact business name and address, because no verified listing URL was supplied. If you have the gym's Google Maps place link, use it for those `href`s instead.
