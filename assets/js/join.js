@@ -197,7 +197,8 @@
     submit.disabled = true; submit.textContent = "Submitting…";
 
     MH.db.from("memberships").insert({
-      full_name: state.name, phone: state.phone, plan_id: state.plan.id, upi_ref: ref
+      full_name: state.name, phone: state.phone, plan_id: state.plan.id, upi_ref: ref,
+      user_id: MH.auth.user().id // the database ignores this for members and uses their login instead
     }).then(function (r) {
       if (r.error) throw r.error;
       state.ref = ref;

@@ -233,8 +233,11 @@
             '<p class="acc__detail">' + esc(detail) + "</p>" +
             (m.upi_ref ? '<p class="acc__ref">UPI ref ' + esc(m.upi_ref) + "</p>" : "") + "</li>";
         }).join("") : '<p class="acc__empty">No memberships yet. Choose a plan to get started.</p>';
-      }).catch(function () {
-        A("[data-acc-list]").innerHTML = '<p class="acc__empty">Couldn\'t load your membership right now. Please try again.</p>';
+      }).catch(function (err) {
+        var outdated = err && (err.code === "42703" || /user_id/.test(err.message || ""));
+        A("[data-acc-list]").innerHTML = '<p class="acc__empty">' + (outdated
+          ? "Membership history isn't available yet. The gym's database needs the latest update (supabase/schema.sql)."
+          : "Couldn't load your membership right now. Please try again.") + "</p>";
       });
   }
 

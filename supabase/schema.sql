@@ -143,6 +143,10 @@ begin
             and created_at > now() - interval '1 day') >= 3 then
         raise exception 'Too many pending requests' using errcode = 'P0001';
       end if;
+    elsif new.user_id is not null then
+      -- An admin joining online for their own account (website sends user_id);
+      -- walk-in members added from the dashboard have no user_id.
+      new.email := coalesce(new.email, (select email from auth.users where id = new.user_id));
     end if;
   else -- UPDATE: plan, price and submission details are immutable
     new.id         := old.id;
@@ -151,8 +155,9 @@ begin
     new.plan_name  := old.plan_name;
     new.months     := old.months;
     new.amount     := old.amount;
-    new.user_id    := old.user_id;
-    new.email      := old.email;
+    -- Account link can be set once (e.g. to attach an older request), never changed.
+    new.user_id    := coalesce(old.user_id, new.user_id);
+    new.email      := coalesce(old.email, new.email);
   end if;
 
   if new.status = 'verified' then
