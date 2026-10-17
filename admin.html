@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin · Muscle House</title>
+  <meta name="theme-color" content="#090909">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="stylesheet" href="assets/css/admin.css">
+</head>
+<body class="admin">
+
+  <!-- ============ NOT CONFIGURED ============ -->
+  <main class="gate" data-view="setup" hidden>
+    <div class="gate__card gate__card--wide">
+      <a class="wordmark" href="index.html"><span class="wordmark__mark" aria-hidden="true">MH</span><span class="wordmark__text">Muscle<span>House</span></span></a>
+      <h1 class="gate__title">Connect the database</h1>
+      <p>The admin dashboard needs a free Supabase project. Until it's connected, the website shows "Enquire now" instead of online payment.</p>
+      <ol class="gate__steps">
+        <li>Create a project at <strong>supabase.com</strong>.</li>
+        <li>Open <strong>SQL Editor</strong>, paste the contents of <code>supabase/schema.sql</code> and run it.</li>
+        <li>Under <strong>Authentication → Users</strong>, add the owner's email and password.</li>
+        <li>Make that user an admin by running the snippet at the bottom of <code>schema.sql</code> with their email.</li>
+        <li>Copy the <strong>Project URL</strong> and <strong>anon public key</strong> (Project Settings → API) into <code>assets/js/config.js</code>.</li>
+      </ol>
+      <p class="gate__fine">Full instructions are in the README.</p>
+    </div>
+  </main>
+
+  <!-- ============ LOGIN ============ -->
+  <main class="gate" data-view="login" hidden>
+    <form class="gate__card" data-login novalidate>
+      <a class="wordmark" href="index.html"><span class="wordmark__mark" aria-hidden="true">MH</span><span class="wordmark__text">Muscle<span>House</span></span></a>
+      <h1 class="gate__title">Admin sign in</h1>
+      <div class="field">
+        <label for="a-email">Email</label>
+        <input id="a-email" name="email" type="email" autocomplete="username" required>
+      </div>
+      <div class="field">
+        <label for="a-password">Password</label>
+        <input id="a-password" name="password" type="password" autocomplete="current-password" required>
+      </div>
+      <div class="form__status is-error" role="alert" data-login-error hidden></div>
+      <button class="btn btn--accent btn--block" type="submit" data-login-submit>Sign in</button>
+    </form>
+  </main>
+
+  <!-- ============ SIGNED IN BUT NOT ADMIN ============ -->
+  <main class="gate" data-view="denied" hidden>
+    <div class="gate__card">
+      <h1 class="gate__title">No admin access</h1>
+      <p><span data-user-email></span> isn't an admin for Muscle House.</p>
+      <button class="btn btn--ghost btn--block" type="button" data-signout>Sign out</button>
+    </div>
+  </main>
+
+  <!-- ============ DASHBOARD ============ -->
+  <div class="app" data-view="app" hidden>
+    <header class="topbar">
+      <div class="topbar__inner">
+        <a class="wordmark" href="index.html" title="View website"><span class="wordmark__mark" aria-hidden="true">MH</span><span class="wordmark__text">Muscle<span>House</span></span></a>
+        <span class="topbar__tag">Admin</span>
+        <nav class="tabs" role="tablist" aria-label="Dashboard sections">
+          <button role="tab" aria-selected="true" aria-controls="tab-members" id="tabbtn-members" data-tab="members">Members</button>
+          <button role="tab" aria-selected="false" aria-controls="tab-payments" id="tabbtn-payments" data-tab="payments" tabindex="-1">Payment details</button>
+          <button role="tab" aria-selected="false" aria-controls="tab-plans" id="tabbtn-plans" data-tab="plans" tabindex="-1">Plans &amp; prices</button>
+        </nav>
+        <div class="topbar__user">
+          <span data-user-email></span>
+          <button class="btn btn--ghost btn--sm" type="button" data-signout>Sign out</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="admin-main">
+      <!-- MEMBERS -->
+      <section id="tab-members" role="tabpanel" aria-labelledby="tabbtn-members" data-panel="members">
+        <div class="stats">
+          <button class="stat" type="button" data-filter-shortcut="active"><span class="stat__k">Active members</span><span class="stat__v" data-stat="active">0</span></button>
+          <button class="stat stat--warn" type="button" data-filter-shortcut="pending"><span class="stat__k">Pending verification</span><span class="stat__v" data-stat="pending">0</span></button>
+          <button class="stat" type="button" data-filter-shortcut="expiring"><span class="stat__k">Expiring in 7 days</span><span class="stat__v" data-stat="expiring">0</span></button>
+          <div class="stat"><span class="stat__k">Verified this month</span><span class="stat__v" data-stat="revenue">₹0</span></div>
+        </div>
+
+        <div class="toolbar">
+          <div class="chips" role="group" aria-label="Filter members">
+            <button class="chip" type="button" data-filter="pending">Pending <span data-count="pending">0</span></button>
+            <button class="chip" type="button" data-filter="active">Active <span data-count="active">0</span></button>
+            <button class="chip" type="button" data-filter="expiring">Expiring soon <span data-count="expiring">0</span></button>
+            <button class="chip" type="button" data-filter="expired">Expired <span data-count="expired">0</span></button>
+            <button class="chip" type="button" data-filter="rejected">Rejected <span data-count="rejected">0</span></button>
+            <button class="chip" type="button" data-filter="all">All <span data-count="all">0</span></button>
+          </div>
+          <div class="toolbar__right">
+            <label class="search"><span class="sr-only">Search members</span><input type="search" placeholder="Search name, phone or UPI ref" data-search></label>
+            <button class="btn btn--ghost btn--sm" type="button" data-refresh>Refresh</button>
+            <button class="btn btn--ghost btn--sm" type="button" data-export>Export CSV</button>
+            <button class="btn btn--accent btn--sm" type="button" data-add>+ Add member</button>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table class="mtable">
+            <thead>
+              <tr>
+                <th scope="col">Member</th>
+                <th scope="col">Plan</th>
+                <th scope="col">Payment</th>
+                <th scope="col">Submitted</th>
+                <th scope="col">Status</th>
+                <th scope="col">Membership</th>
+                <th scope="col"><span class="sr-only">Actions</span></th>
+              </tr>
+            </thead>
+            <tbody data-rows></tbody>
+          </table>
+          <p class="empty" data-empty hidden>No members match this view.</p>
+        </div>
+        <p class="admin-fine">Payments made by QR go straight to your UPI account. Before you tap <strong>Verify</strong>, check that the amount and UPI reference appear in your bank or UPI app.</p>
+      </section>
+
+      <!-- PAYMENT DETAILS -->
+      <section id="tab-payments" role="tabpanel" aria-labelledby="tabbtn-payments" data-panel="payments" hidden>
+        <div class="panel-grid">
+          <form class="card" data-settings novalidate>
+            <h2 class="card__title">Payment details</h2>
+            <p class="card__lede">Members scan a QR built from these details and pay you directly. There's no payment gateway and no fees.</p>
+            <div class="field">
+              <label for="s-upi">UPI ID (VPA)</label>
+              <input id="s-upi" name="upi_id" type="text" autocomplete="off" spellcheck="false" placeholder="e.g. musclehouse@okaxis" aria-describedby="s-upi-hint s-upi-err">
+              <p class="field__hint" id="s-upi-hint">Find it in GPay, PhonePe, Paytm or your bank app under your profile. A bank account number and IFSC can't go into a UPI QR, so use the UPI ID linked to that account. A merchant or business UPI ID is the most reliable for receiving payments.</p>
+              <p class="field__error" id="s-upi-err" aria-live="polite"></p>
+            </div>
+            <div class="field">
+              <label for="s-payee">Payee name</label>
+              <input id="s-payee" name="payee_name" type="text" maxlength="60" placeholder="Name on the account" aria-describedby="s-payee-err">
+              <p class="field__error" id="s-payee-err" aria-live="polite"></p>
+            </div>
+            <label class="check">
+              <input type="checkbox" name="show_sample_notice">
+              <span>Show the "sample prices" notice on the website</span>
+            </label>
+            <div class="form__status" role="status" data-settings-status hidden></div>
+            <button class="btn btn--accent" type="submit">Save payment details</button>
+          </form>
+
+          <div class="card card--qr">
+            <h2 class="card__title">Test your QR</h2>
+            <div class="qr-preview" data-preview-qr><p>Enter a UPI ID to preview.</p></div>
+            <p class="card__lede">Scan this with your own phone. Your UPI app should show <strong data-preview-payee>your payee name</strong>. Close the app without paying.</p>
+            <p class="admin-fine">When online payment is on (UPI ID and payee name saved), each plan on the website shows <strong>Join &amp; pay</strong>.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- PLANS -->
+      <section id="tab-plans" role="tabpanel" aria-labelledby="tabbtn-plans" data-panel="plans" hidden>
+        <div class="card">
+          <h2 class="card__title">Plans &amp; prices</h2>
+          <p class="card__lede">Prices update on the website immediately. Existing memberships keep the price they were bought at.</p>
+          <div class="table-wrap">
+            <table class="ptable">
+              <thead><tr><th scope="col">Plan</th><th scope="col">Length</th><th scope="col">Price (₹)</th><th scope="col">Shown on website</th><th scope="col"><span class="sr-only">Save</span></th></tr></thead>
+              <tbody data-plan-rows></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ============ DIALOGS ============ -->
+  <dialog class="adialog" data-dialog="verify" aria-labelledby="dv-title">
+    <form method="dialog" class="adialog__body" data-verify-form>
+      <h2 id="dv-title">Verify payment</h2>
+      <p class="adialog__summary" data-verify-summary></p>
+      <p class="admin-fine">Confirm you've received this exact amount with this UPI reference in your bank or UPI app.</p>
+      <div class="field">
+        <label for="dv-start">Membership starts</label>
+        <input id="dv-start" name="start_date" type="date" required>
+      </div>
+      <div class="field">
+        <label for="dv-note">Note <span class="optional">(optional)</span></label>
+        <input id="dv-note" name="note" type="text" maxlength="500">
+      </div>
+      <div class="adialog__actions">
+        <button class="btn btn--ghost" value="cancel" formnovalidate>Cancel</button>
+        <button class="btn btn--accent" value="ok">Verify &amp; activate</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="adialog" data-dialog="reject" aria-labelledby="dr-title">
+    <form method="dialog" class="adialog__body">
+      <h2 id="dr-title">Reject request</h2>
+      <p class="adialog__summary" data-reject-summary></p>
+      <div class="field">
+        <label for="dr-note">Reason <span class="optional">(optional, for your records)</span></label>
+        <input id="dr-note" name="note" type="text" maxlength="500" placeholder="e.g. Payment not received">
+      </div>
+      <div class="adialog__actions">
+        <button class="btn btn--ghost" value="cancel" formnovalidate>Cancel</button>
+        <button class="btn btn--danger" value="ok">Reject</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="adialog" data-dialog="delete" aria-labelledby="dd-title">
+    <form method="dialog" class="adialog__body">
+      <h2 id="dd-title">Delete record?</h2>
+      <p class="adialog__summary" data-delete-summary></p>
+      <p class="admin-fine">This permanently removes the record. This can't be undone.</p>
+      <div class="adialog__actions">
+        <button class="btn btn--ghost" value="cancel" formnovalidate>Cancel</button>
+        <button class="btn btn--danger" value="ok">Delete</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="adialog" data-dialog="add" aria-labelledby="da-title">
+    <form method="dialog" class="adialog__body" data-add-form novalidate>
+      <h2 id="da-title">Add member</h2>
+      <p class="admin-fine">For walk-in or cash payments. The member is added as active.</p>
+      <div class="field"><label for="da-name">Full name</label><input id="da-name" name="full_name" type="text" maxlength="80" required></div>
+      <div class="field"><label for="da-phone">Phone</label><input id="da-phone" name="phone" type="tel" required placeholder="10-digit mobile"></div>
+      <div class="field-row">
+        <div class="field"><label for="da-plan">Plan</label><select id="da-plan" name="plan_id" required data-add-plans></select></div>
+        <div class="field"><label for="da-method">Paid by</label>
+          <select id="da-method" name="payment_method"><option value="cash">Cash</option><option value="upi">UPI</option><option value="other">Other</option></select>
+        </div>
+      </div>
+      <div class="field"><label for="da-ref">UPI reference <span class="optional">(required for UPI)</span></label><input id="da-ref" name="upi_ref" type="text" maxlength="40"></div>
+      <div class="field"><label for="da-start">Membership starts</label><input id="da-start" name="start_date" type="date" required></div>
+      <div class="form__status is-error" role="alert" data-add-error hidden></div>
+      <div class="adialog__actions">
+        <button class="btn btn--ghost" value="cancel" formnovalidate>Cancel</button>
+        <button class="btn btn--accent" value="ok">Add member</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="toast" role="status" aria-live="polite" data-toast hidden></div>
+
+  <script src="assets/js/config.js"></script>
+  <script src="assets/vendor/supabase-2.45.4.min.js"></script>
+  <script src="assets/vendor/qrcode-generator-1.4.4.js"></script>
+  <script src="assets/js/upi.js"></script>
+  <script src="assets/js/admin.js"></script>
+</body>
+</html>

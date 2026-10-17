@@ -2,13 +2,21 @@
 
 A premium, responsive single-page website for **Muscle House Gym & Fitness Centre**, HSR Layout, Bengaluru.
 
-It's a static site (HTML, CSS and vanilla JavaScript) with no build step and no dependencies, so it can be hosted anywhere.
+It's a static site (HTML, CSS and vanilla JavaScript) with no build step, so it can be hosted anywhere. Online membership sign-ups and the admin dashboard use a free [Supabase](https://supabase.com) database.
 
 ```
-index.html            All page sections, SEO meta, Open Graph, LocalBusiness JSON-LD
-assets/css/styles.css Design system, textures, layout, motion (respects reduced-motion)
-assets/js/main.js     Nav, mobile menu, parallax, scroll reveals, map lazy-load, enquiry form
-assets/img/           Optimised WebP photography, og.jpg (social preview), favicon.svg
+index.html             All page sections, SEO meta, Open Graph, LocalBusiness JSON-LD, Join & pay dialog
+admin.html             Owner dashboard: members, payment verification, UPI details, plan prices
+assets/css/styles.css  Design system, textures, layout, motion (respects reduced-motion)
+assets/css/admin.css   Dashboard styles
+assets/js/main.js      Nav, mobile menu, parallax, scroll reveals, map lazy-load, enquiry form
+assets/js/config.js    Supabase project URL + public (anon) key: the only file you edit to connect
+assets/js/upi.js       Shared UPI link / QR code / REST helpers
+assets/js/join.js      Live plan prices + the Join & pay (UPI QR) flow on the website
+assets/js/admin.js     Dashboard logic
+assets/vendor/         supabase-js 2.45.4 and qrcode-generator 1.4.4 (both MIT), bundled locally
+supabase/schema.sql    Database tables, security rules and admin setup: run once in Supabase
+assets/img/            Optimised WebP photography, og.jpg (social preview), favicon.svg
 ```
 
 ## Run locally
@@ -30,6 +38,45 @@ Any static host works. Pick one:
 - **Cloudflare Pages:** connect the repo with no build command and output directory `/`.
 
 After deploying to a final domain, change the relative `og:image` / `twitter:image` URLs in `index.html` to absolute URLs (for example `https://yourdomain.com/assets/img/og.jpg`). Some social platforms need absolute URLs to show the preview image.
+
+## Memberships, UPI payments and the admin dashboard
+
+### How it works
+
+There's no payment gateway. Members pay the gym's own UPI ID directly by scanning a QR code, so there are no fees, but the website **cannot see whether a payment succeeded**. The owner therefore confirms each payment:
+
+1. **Member (website):** picks a plan → **Join & pay** → enters name and phone → scans the QR (the amount is pre-filled; on phones there's also an *Open UPI app* button) → pays → enters the UPI transaction ID (UTR) from the receipt → **Submit for verification**. The site says the request is *pending verification*. It never says "paid".
+2. **Owner (`/admin.html`):** signs in → **Members → Pending** → checks that the amount and UTR appear in the bank or UPI app → **Verify**. The membership becomes **Active**, and the end date is set from the plan length. Use **Reject** if the payment isn't there.
+
+The dashboard also shows **Active**, **Expiring in 7 days**, **Expired** and **Rejected** members, plus search, CSV export, and **+ Add member** for walk-in or cash payments.
+
+Under **Payment details** the owner enters their **UPI ID** (for example `name@okaxis`) and **payee name**, and can test-scan a preview QR. A bank account number and IFSC can't be encoded in a UPI QR, so use the UPI ID linked to the account. A merchant or business UPI ID is the most reliable for receiving payments. Some UPI apps limit amounts or show warnings when paying a *personal* UPI ID from a QR.
+
+Under **Plans & prices** the owner edits prices and hides or shows plans. The website updates immediately.
+
+### One-time setup (about 10 minutes)
+
+1. Create a free project at <https://supabase.com> (pick the Mumbai region for India).
+2. **SQL Editor → New query:** paste all of `supabase/schema.sql` → **Run**.
+3. **Authentication → Users → Add user → Create new user:** enter the owner's email and a strong password, and tick *Auto confirm user*.
+4. Back in the **SQL Editor**, make that user an admin:
+   ```sql
+   insert into public.admins (user_id)
+   select id from auth.users where email = 'owner@example.com';
+   ```
+5. **Authentication → Sign In / Providers:** turn **off** *Allow new users to sign up*. Non-admins can't see any data anyway, but this keeps the user list clean.
+6. **Project Settings → API:** copy the **Project URL** and the **anon public** key into `assets/js/config.js`, then commit and deploy. Never use the `service_role` key on the website.
+7. Open `https://<your-site>/admin.html`, sign in, and fill in **Payment details**. Each plan on the website then shows **Join & pay**.
+
+Until `config.js` is filled in, the website keeps working exactly as before, with "Enquire now" buttons and the static sample prices.
+
+### Security
+
+- The public key can only **read active plans and the UPI settings** and **submit a pending request**. It can never read, change or delete member records (enforced by Postgres row-level security in `schema.sql`).
+- The **price, plan length and status are set by the database**, not the browser, so nobody can submit a lower amount or mark themselves active.
+- Duplicate UPI transaction IDs are rejected, and a phone number can have at most 3 pending requests per day.
+- Member names and other text are HTML-escaped in the dashboard, and the CSV export guards against spreadsheet formula injection.
+- `admin.html` is marked `noindex`, but it relies on the login and database rules for protection, not on staying hidden.
 
 ## Enquiry form: how it works
 
@@ -64,6 +111,8 @@ Aim for about 1600px on the long edge, WebP at roughly 70–80% quality. If you 
 
 Only verified facts are used: name, address, phone, the 4.4/5 Google rating from 105 reviews, the listed 10:00 PM closing time, and the three supplied review quotes. Opening hours, trainer credentials, amenities and statistics are deliberately left out.
 
-**Membership prices are placeholders.** The Membership section shows sample prices (₹2,000 / ₹5,500 / ₹9,500 / ₹16,000), labelled on the page as "sample prices … to be confirmed". Before launch, edit the prices, per-month figures and "Save ₹…" lines in the `MEMBERSHIP` block of `index.html` to the gym's real rates, then delete the `.plans__disclaimer` note. The structured data contains no hours or rating markup.
+The structured data contains no hours or rating markup.
+
+**Membership prices are placeholders** (₹2,000 / ₹5,500 / ₹9,500 / ₹16,000), and the page labels them "sample prices … to be confirmed". Once Supabase is connected, set the real prices in **admin → Plans & prices** and untick *Show the "sample prices" notice* under **Payment details**. Without Supabase, edit the numbers in the `MEMBERSHIP` block of `index.html` and delete the `.plans__disclaimer` note.
 
 The "Read all reviews" and Maps links use a Google Maps **search** for the exact business name and address, because no verified listing URL was supplied. If you have the gym's Google Maps place link, use it for those `href`s instead.

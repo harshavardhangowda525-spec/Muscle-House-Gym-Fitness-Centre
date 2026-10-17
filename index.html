@@ -270,57 +270,74 @@
             <p class="label reveal">05 — Membership</p>
             <h2 class="display-xl reveal" id="membership-title">Choose your <br><span class="accent">commitment.</span></h2>
           </div>
-          <p class="section-note reveal plans__disclaimer">Sample prices shown for preview purposes only. Final pricing is to be confirmed by Muscle House, so please enquire or call for current rates.</p>
+          <p class="section-note reveal plans__disclaimer" data-sample-notice>Sample prices shown for preview purposes only. Final pricing is to be confirmed by Muscle House, so please enquire or call for current rates.</p>
         </header>
 
         <ul class="plans">
-          <li class="plan reveal">
-            <h3 class="plan__name">Monthly</h3>
-            <p class="plan__price"><span class="plan__currency">₹</span>2,000<span class="plan__period">/ month</span></p>
-            <p class="plan__per">₹2,000 per month</p>
+          <li class="plan reveal" data-plan-id="monthly">
+            <h3 class="plan__name" data-name>Monthly</h3>
+            <p class="plan__price"><span class="plan__currency">₹</span><span data-price>2,000</span><span class="plan__period" data-period>/ month</span></p>
+            <p class="plan__per" data-per>₹2,000 per month</p>
             <p class="plan__note">Try it out with no long commitment.</p>
             <ul class="plan__features">
               <li>Full gym floor access</li>
               <li>Trainer guidance on the floor</li>
+              <li data-save hidden>Save ₹0 vs monthly</li>
             </ul>
-            <a class="btn btn--ghost btn--block" href="#enquire" data-plan="Monthly">Enquire now<span class="sr-only"> about the Monthly plan</span></a>
+            <div class="plan__actions">
+              <button class="btn btn--ghost btn--block" type="button" data-join="monthly" hidden>Join &amp; pay<span class="sr-only"> for the Monthly plan</span></button>
+              <a class="btn btn--ghost btn--block" href="#enquire" data-plan="Monthly" data-enquire-primary>Enquire now<span class="sr-only"> about the Monthly plan</span></a>
+              <a class="plan__enquire" href="#enquire" data-plan="Monthly" data-enquire-secondary hidden>or enquire first</a>
+            </div>
           </li>
-          <li class="plan reveal" style="--d:.08s">
-            <h3 class="plan__name">Quarterly</h3>
-            <p class="plan__price"><span class="plan__currency">₹</span>5,500<span class="plan__period">/ 3 months</span></p>
-            <p class="plan__per">≈ ₹1,833 per month</p>
+          <li class="plan reveal" data-plan-id="quarterly" style="--d:.08s">
+            <h3 class="plan__name" data-name>Quarterly</h3>
+            <p class="plan__price"><span class="plan__currency">₹</span><span data-price>5,500</span><span class="plan__period" data-period>/ 3 months</span></p>
+            <p class="plan__per" data-per>≈ ₹1,833 per month</p>
             <p class="plan__note">Build a habit over a full training block.</p>
             <ul class="plan__features">
               <li>Full gym floor access</li>
               <li>Trainer guidance on the floor</li>
-              <li>Save ₹500 vs monthly</li>
+              <li data-save>Save ₹500 vs monthly</li>
             </ul>
-            <a class="btn btn--ghost btn--block" href="#enquire" data-plan="Quarterly">Enquire now<span class="sr-only"> about the Quarterly plan</span></a>
+            <div class="plan__actions">
+              <button class="btn btn--ghost btn--block" type="button" data-join="quarterly" hidden>Join &amp; pay<span class="sr-only"> for the Quarterly plan</span></button>
+              <a class="btn btn--ghost btn--block" href="#enquire" data-plan="Quarterly" data-enquire-primary>Enquire now<span class="sr-only"> about the Quarterly plan</span></a>
+              <a class="plan__enquire" href="#enquire" data-plan="Quarterly" data-enquire-secondary hidden>or enquire first</a>
+            </div>
           </li>
-          <li class="plan reveal" style="--d:.16s">
-            <h3 class="plan__name">Half-Yearly</h3>
-            <p class="plan__price"><span class="plan__currency">₹</span>9,500<span class="plan__period">/ 6 months</span></p>
-            <p class="plan__per">≈ ₹1,583 per month</p>
+          <li class="plan reveal" data-plan-id="half-yearly" style="--d:.16s">
+            <h3 class="plan__name" data-name>Half-Yearly</h3>
+            <p class="plan__price"><span class="plan__currency">₹</span><span data-price>9,500</span><span class="plan__period" data-period>/ 6 months</span></p>
+            <p class="plan__per" data-per>≈ ₹1,583 per month</p>
             <p class="plan__note">Six months to see consistent progress.</p>
             <ul class="plan__features">
               <li>Full gym floor access</li>
               <li>Trainer guidance on the floor</li>
-              <li>Save ₹2,500 vs monthly</li>
+              <li data-save>Save ₹2,500 vs monthly</li>
             </ul>
-            <a class="btn btn--ghost btn--block" href="#enquire" data-plan="Half-Yearly">Enquire now<span class="sr-only"> about the Half-Yearly plan</span></a>
+            <div class="plan__actions">
+              <button class="btn btn--ghost btn--block" type="button" data-join="half-yearly" hidden>Join &amp; pay<span class="sr-only"> for the Half-Yearly plan</span></button>
+              <a class="btn btn--ghost btn--block" href="#enquire" data-plan="Half-Yearly" data-enquire-primary>Enquire now<span class="sr-only"> about the Half-Yearly plan</span></a>
+              <a class="plan__enquire" href="#enquire" data-plan="Half-Yearly" data-enquire-secondary hidden>or enquire first</a>
+            </div>
           </li>
-          <li class="plan reveal plan--featured" style="--d:.24s">
+          <li class="plan reveal plan--featured" data-plan-id="annual" style="--d:.24s">
             <span class="plan__badge">Best value</span>
-            <h3 class="plan__name">Annual</h3>
-            <p class="plan__price"><span class="plan__currency">₹</span>16,000<span class="plan__period">/ 12 months</span></p>
-            <p class="plan__per">≈ ₹1,333 per month</p>
+            <h3 class="plan__name" data-name>Annual</h3>
+            <p class="plan__price"><span class="plan__currency">₹</span><span data-price>16,000</span><span class="plan__period" data-period>/ 12 months</span></p>
+            <p class="plan__per" data-per>≈ ₹1,333 per month</p>
             <p class="plan__note">The lowest monthly cost for committed members.</p>
             <ul class="plan__features">
               <li>Full gym floor access</li>
               <li>Trainer guidance on the floor</li>
-              <li>Save ₹8,000 vs monthly</li>
+              <li data-save>Save ₹8,000 vs monthly</li>
             </ul>
-            <a class="btn btn--accent btn--block" href="#enquire" data-plan="Annual">Enquire now<span class="sr-only"> about the Annual plan</span></a>
+            <div class="plan__actions">
+              <button class="btn btn--accent btn--block" type="button" data-join="annual" hidden>Join &amp; pay<span class="sr-only"> for the Annual plan</span></button>
+              <a class="btn btn--accent btn--block" href="#enquire" data-plan="Annual" data-enquire-primary>Enquire now<span class="sr-only"> about the Annual plan</span></a>
+              <a class="plan__enquire" href="#enquire" data-plan="Annual" data-enquire-secondary hidden>or enquire first</a>
+            </div>
           </li>
         </ul>
 
@@ -523,6 +540,83 @@
     </div>
   </footer>
 
+
+  <!-- ============ JOIN & PAY DIALOG (UPI QR, no payment gateway) ============ -->
+  <dialog class="join" id="join-dialog" aria-labelledby="join-title">
+    <button class="join__close" type="button" data-join-close aria-label="Close">×</button>
+    <header class="join__head">
+      <p class="label">Join Muscle House</p>
+      <h2 class="join__title" id="join-title"><span data-j-plan>Plan</span> plan</h2>
+      <p class="join__amount"><strong data-j-amount>₹0</strong> · <span data-j-duration></span></p>
+      <ol class="join__steps" aria-label="Steps">
+        <li data-step-dot="1" class="is-current"><span>1</span>Details</li>
+        <li data-step-dot="2"><span>2</span>Pay</li>
+        <li data-step-dot="3"><span>3</span>Confirm</li>
+      </ol>
+    </header>
+
+    <section class="join__step" data-step="1">
+      <form class="join__form" data-join-details novalidate>
+        <div class="field">
+          <label for="j-name">Full name <span aria-hidden="true">*</span></label>
+          <input id="j-name" name="name" type="text" autocomplete="name" required maxlength="80" aria-describedby="j-name-err">
+          <p class="field__error" id="j-name-err" aria-live="polite"></p>
+        </div>
+        <div class="field">
+          <label for="j-phone">Phone number <span aria-hidden="true">*</span></label>
+          <input id="j-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required placeholder="e.g. 98765 43210" aria-describedby="j-phone-err">
+          <p class="field__error" id="j-phone-err" aria-live="polite"></p>
+        </div>
+        <button class="btn btn--accent btn--block" type="submit">Continue to payment <span class="btn__arrow" aria-hidden="true">→</span></button>
+      </form>
+    </section>
+
+    <section class="join__step" data-step="2" hidden>
+      <div class="join__pay">
+        <div class="join__qr" data-j-qr></div>
+        <div class="join__payinfo">
+          <p class="join__scan">Scan with any UPI app: GPay, PhonePe, Paytm or your bank app.</p>
+          <dl class="join__dl">
+            <div><dt>Pay to</dt><dd data-j-payee></dd></div>
+            <div><dt>UPI ID</dt><dd><span data-j-vpa></span> <button class="join__copy" type="button" data-j-copy>Copy</button></dd></div>
+            <div><dt>Amount</dt><dd data-j-amount2></dd></div>
+          </dl>
+          <a class="btn btn--ghost btn--block join__app" data-j-app href="#">Open UPI app</a>
+        </div>
+      </div>
+      <form class="join__form" data-join-pay novalidate>
+        <div class="field">
+          <label for="j-ref">UPI transaction ID (UTR) <span aria-hidden="true">*</span></label>
+          <input id="j-ref" name="ref" type="text" inputmode="text" autocomplete="off" required maxlength="40" placeholder="e.g. 412345678901" aria-describedby="j-ref-hint j-ref-err">
+          <p class="field__hint" id="j-ref-hint">After paying, copy the 12-digit UTR / UPI reference number from your payment receipt.</p>
+          <p class="field__error" id="j-ref-err" aria-live="polite"></p>
+        </div>
+        <div class="form__status is-error" role="alert" data-j-error hidden></div>
+        <div class="join__row">
+          <button class="btn btn--ghost" type="button" data-j-back>← Back</button>
+          <button class="btn btn--accent" type="submit" data-j-submit>Submit for verification</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="join__step" data-step="3" hidden>
+      <div class="join__done" tabindex="-1" data-j-done>
+        <p class="join__badge">Pending verification</p>
+        <h3>Request received.</h3>
+        <p>Muscle House will check your payment of <strong data-j-amount3></strong> (UPI ref <strong data-j-ref></strong>) and confirm your <span data-j-plan2></span> membership on <strong data-j-phone></strong>.</p>
+        <p class="join__fine">Your membership becomes active once the gym has verified the payment. Keep your UPI receipt until then.</p>
+        <div class="join__row">
+          <a class="btn btn--ghost" href="tel:+916363342090">Call the gym</a>
+          <button class="btn btn--accent" type="button" data-join-close>Done</button>
+        </div>
+      </div>
+    </section>
+  </dialog>
+
   <script src="assets/js/main.js" defer></script>
+  <script src="assets/js/config.js" defer></script>
+  <script src="assets/vendor/qrcode-generator-1.4.4.js" defer></script>
+  <script src="assets/js/upi.js" defer></script>
+  <script src="assets/js/join.js" defer></script>
 </body>
 </html>
