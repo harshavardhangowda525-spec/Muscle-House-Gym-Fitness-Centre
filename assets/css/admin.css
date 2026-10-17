@@ -86,12 +86,6 @@ a.sub:hover { color: var(--lime); }
 .actions > * + * { margin-left: .35rem; }
 .empty { padding: 2.5rem 1rem; text-align: center; color: var(--steel); }
 
-.badge { display: inline-block; padding: .25rem .6rem; border-radius: 999px; font-size: .68rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; border: 1px solid; }
-.badge--pending  { color: #FFD666; border-color: rgba(255,214,102,.45); background: rgba(255,214,102,.08); }
-.badge--active   { color: var(--lime); border-color: rgba(198,255,0,.45); background: rgba(198,255,0,.08); }
-.badge--expiring { color: #FFB86B; border-color: rgba(255,184,107,.45); background: rgba(255,184,107,.08); }
-.badge--expired  { color: var(--steel); border-color: var(--line-strong); }
-.badge--rejected { color: #FF8A80; border-color: rgba(255,107,94,.45); background: rgba(255,107,94,.08); }
 
 /* Stack table rows as cards on small screens */
 @media (max-width: 860px) {

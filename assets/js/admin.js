@@ -176,7 +176,7 @@
       var inFilter = f === "all" || m._bucket === f || (f === "active" && m._bucket === "expiring");
       if (!inFilter) return false;
       if (!q) return true;
-      return (m.full_name + " " + m.phone + " " + (m.upi_ref || "")).toLowerCase().indexOf(q) !== -1;
+      return (m.full_name + " " + m.phone + " " + (m.email || "") + " " + (m.upi_ref || "")).toLowerCase().indexOf(q) !== -1;
     });
 
     $("[data-rows]").innerHTML = rows.map(function (m) { return rowHtml(m, today); }).join("");
@@ -202,7 +202,8 @@
     actions.push('<button class="iconbtn" data-act="delete" aria-label="Delete record" title="Delete">✕</button>');
 
     return '<tr data-id="' + esc(m.id) + '">' +
-      '<td data-label="Member"><strong>' + esc(m.full_name) + '</strong><a class="sub" href="tel:+91' + esc(m.phone) + '">+91 ' + esc(m.phone) + "</a></td>" +
+      '<td data-label="Member"><strong>' + esc(m.full_name) + '</strong><a class="sub" href="tel:+91' + esc(m.phone) + '">+91 ' + esc(m.phone) + "</a>" +
+        (m.email ? '<span class="sub">' + esc(m.email) + "</span>" : "") + "</td>" +
       '<td data-label="Plan">' + esc(m.plan_name) + '<span class="sub">' + MH.inr(m.amount) + "</span></td>" +
       '<td data-label="Payment">' + esc(m.payment_method.toUpperCase()) + '<span class="sub mono">' + esc(m.upi_ref || "—") + "</span></td>" +
       '<td data-label="Submitted">' + fmtDate(m.created_at) + "</td>" +
@@ -334,7 +335,7 @@
   $("[data-export]").addEventListener("click", function () {
     var ids = $$("[data-rows] tr").map(function (tr) { return tr.getAttribute("data-id"); });
     var rows = state.members.filter(function (m) { return ids.indexOf(m.id) !== -1; });
-    var cols = ["full_name", "phone", "plan_name", "amount", "payment_method", "upi_ref", "status", "start_date", "end_date", "created_at", "admin_note"];
+    var cols = ["full_name", "phone", "email", "plan_name", "amount", "payment_method", "upi_ref", "status", "start_date", "end_date", "created_at", "admin_note"];
     var csv = [cols.join(",")].concat(rows.map(function (m) {
       return cols.map(function (c) {
         var v = m[c] == null ? "" : String(m[c]);

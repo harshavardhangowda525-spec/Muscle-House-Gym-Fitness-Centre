@@ -44,7 +44,7 @@
     if (open) { var first = menu.querySelector("a"); if (first) first.focus(); }
   }
   toggle.addEventListener("click", function () { setMenu(menu.hidden); });
-  menu.addEventListener("click", function (e) { if (e.target.closest("a")) setMenu(false); });
+  menu.addEventListener("click", function (e) { if (e.target.closest("a, [data-account-btn]")) setMenu(false); });
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape" && !menu.hidden) { setMenu(false); toggle.focus(); }
   });

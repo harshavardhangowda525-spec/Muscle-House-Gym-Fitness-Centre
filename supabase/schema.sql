@@ -5,9 +5,10 @@
 -- It is safe to re-run: tables use IF NOT EXISTS, functions/policies are replaced.
 --
 -- Security model
---   * The public website (anon key) can only: read active plans, read the UPI
---     payment settings, and INSERT a membership request. It can never read,
---     change or delete memberships.
+--   * Visitors (anon key) can only read active plans and the UPI settings.
+--   * Logged-in members can submit a membership request (linked to their
+--     account) and read their OWN records — never anyone else's, and they
+--     can't change or delete anything.
 --   * Prices, plan length and status are set by the database, not the browser,
 --     so a visitor cannot submit a different amount or mark themselves active.
 --   * Only users listed in public.admins can read/manage memberships and change
@@ -90,6 +91,12 @@ create table if not exists public.memberships (
 create unique index if not exists memberships_upi_ref_key on public.memberships (upi_ref) where upi_ref is not null;
 create index if not exists memberships_created_at_idx on public.memberships (created_at desc);
 
+-- Member accounts: each online request is linked to the member's login.
+-- (ADD COLUMN IF NOT EXISTS keeps this safe on databases created earlier.)
+alter table public.memberships add column if not exists user_id uuid references auth.users (id) on delete set null;
+alter table public.memberships add column if not exists email   text;
+create index if not exists memberships_user_id_idx on public.memberships (user_id);
+
 -- Sets price/plan from the plans table, forces safe defaults for public
 -- submissions, and keeps start/end dates consistent with the status.
 create or replace function public.memberships_guard()
@@ -117,17 +124,24 @@ begin
     new.upi_ref    := nullif(upper(btrim(coalesce(new.upi_ref, ''))), '');
 
     if not admin_user then
-      -- Public sign-ups: always UPI, always pending, never pre-dated.
+      -- Online sign-ups need a logged-in member; link the request to them.
+      if auth.uid() is null then
+        raise exception 'Please log in to join' using errcode = '42501';
+      end if;
+      new.user_id := auth.uid();
+      new.email   := (select email from auth.users where id = auth.uid());
+
+      -- Always UPI, always pending, never pre-dated.
       new.payment_method := 'upi';
       new.status         := 'pending';
       new.start_date     := null;
       new.admin_note     := null;
 
-      -- Basic abuse protection: max 3 pending requests per phone per day.
+      -- Basic abuse protection: max 3 pending requests per phone or account per day.
       if (select count(*) from public.memberships
-          where phone = new.phone and status = 'pending'
+          where (phone = new.phone or user_id = new.user_id) and status = 'pending'
             and created_at > now() - interval '1 day') >= 3 then
-        raise exception 'Too many pending requests for this phone number' using errcode = 'P0001';
+        raise exception 'Too many pending requests' using errcode = 'P0001';
       end if;
     end if;
   else -- UPDATE: plan, price and submission details are immutable
@@ -137,6 +151,8 @@ begin
     new.plan_name  := old.plan_name;
     new.months     := old.months;
     new.amount     := old.amount;
+    new.user_id    := old.user_id;
+    new.email      := old.email;
   end if;
 
   if new.status = 'verified' then
@@ -180,7 +196,7 @@ grant select                         on public.settings    to anon, authenticate
 grant update                         on public.settings    to authenticated;
 grant select                         on public.plans       to anon, authenticated;
 grant update                         on public.plans       to authenticated;
-grant insert                         on public.memberships to anon, authenticated;
+grant insert                         on public.memberships to authenticated;
 grant select, update, delete         on public.memberships to authenticated;
 grant execute on function public.is_admin() to anon, authenticated;
 
@@ -205,13 +221,15 @@ drop policy if exists plans_admin_update on public.plans;
 create policy plans_admin_update on public.plans
   for update to authenticated using (public.is_admin()) with check (public.is_admin());
 
--- memberships: anyone may submit; only admins may read, change or delete
+-- memberships: logged-in members may submit and see only their own records;
+-- only admins may read everything, change or delete
 drop policy if exists memberships_submit on public.memberships;
 create policy memberships_submit on public.memberships
-  for insert to anon, authenticated with check (true);
+  for insert to authenticated with check (true);
 drop policy if exists memberships_admin_read on public.memberships;
-create policy memberships_admin_read on public.memberships
-  for select to authenticated using (public.is_admin());
+drop policy if exists memberships_read on public.memberships;
+create policy memberships_read on public.memberships
+  for select to authenticated using (user_id = auth.uid() or public.is_admin());
 drop policy if exists memberships_admin_update on public.memberships;
 create policy memberships_admin_update on public.memberships
   for update to authenticated using (public.is_admin()) with check (public.is_admin());

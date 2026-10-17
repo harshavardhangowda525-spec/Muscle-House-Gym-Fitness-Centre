@@ -12,6 +12,7 @@ assets/css/admin.css   Dashboard styles
 assets/js/main.js      Nav, mobile menu, parallax, scroll reveals, map lazy-load, enquiry form
 assets/js/config.js    Supabase project URL + public (anon) key: the only file you edit to connect
 assets/js/upi.js       Shared UPI link / QR code / REST helpers
+assets/js/auth.js      Member log in / sign up (email or Google), password reset, "My membership"
 assets/js/join.js      Live plan prices + the Join & pay (UPI QR) flow on the website
 assets/js/admin.js     Dashboard logic
 assets/vendor/         supabase-js 2.45.4 and qrcode-generator 1.4.4 (both MIT), bundled locally
@@ -45,7 +46,7 @@ After deploying to a final domain, change the relative `og:image` / `twitter:ima
 
 There's no payment gateway. Members pay the gym's own UPI ID directly by scanning a QR code, so there are no fees, but the website **cannot see whether a payment succeeded**. The owner therefore confirms each payment:
 
-1. **Member (website):** picks a plan → **Join & pay** → enters name and phone → scans the QR (the amount is pre-filled; on phones there's also an *Open UPI app* button) → pays → enters the UPI transaction ID (UTR) from the receipt → **Submit for verification**. The site says the request is *pending verification*. It never says "paid".
+1. **Member (website):** picks a plan → **Join & pay** → **logs in or creates an account** (email + password or **Continue with Google**) → enters name and phone → scans the QR (the amount is pre-filled; on phones there's also an *Open UPI app* button) → pays → enters the UPI transaction ID (UTR) from the receipt → **Submit for verification**. The site says the request is *pending verification*. It never says "paid".
 2. **Owner (`/admin.html`):** signs in → **Members → Pending** → checks that the amount and UTR appear in the bank or UPI app → **Verify**. The membership becomes **Active**, and the end date is set from the plan length. Use **Reject** if the payment isn't there.
 
 The dashboard also shows **Active**, **Expiring in 7 days**, **Expired** and **Rejected** members, plus search, CSV export, and **+ Add member** for walk-in or cash payments.
@@ -53,6 +54,20 @@ The dashboard also shows **Active**, **Expiring in 7 days**, **Expired** and **R
 Under **Payment details** the owner enters their **UPI ID** (for example `name@okaxis`) and **payee name**, and can test-scan a preview QR. A bank account number and IFSC can't be encoded in a UPI QR, so use the UPI ID linked to the account. A merchant or business UPI ID is the most reliable for receiving payments. Some UPI apps limit amounts or show warnings when paying a *personal* UPI ID from a QR.
 
 Under **Plans & prices** the owner edits prices and hides or shows plans. The website updates immediately.
+
+Members can open **My membership** (person icon in the header) to see each request's status: *Pending verification*, *Active until …*, *Expired* or *Not approved*. They can also log out there.
+
+### Member accounts: Supabase + Google settings
+
+After pulling this version, do these once:
+
+1. **Update the database:** SQL Editor → New query → paste all of `supabase/schema.sql` → Run. It's safe to re-run, and existing members, prices and your admin login are kept.
+2. **Allow sign-ups:** Authentication → Sign In / Providers → turn **on** *Allow new users to sign up*.
+3. **No email confirmation:** on the same page, open **Email** → turn **off** *Confirm email* → Save.
+4. **Site address:** Authentication → URL Configuration → *Site URL* = `https://harshavardhangowda525-spec.github.io/Muscle-House-Gym-Fitness-Centre/`. Under *Redirect URLs*, add `https://harshavardhangowda525-spec.github.io/Muscle-House-Gym-Fitness-Centre/**`.
+5. **Google:** create an OAuth client in Google Cloud (Web application). Set *Authorized JavaScript origins* to `https://harshavardhangowda525-spec.github.io` and *Authorized redirect URIs* to `https://<project-ref>.supabase.co/auth/v1/callback`. Paste the Client ID and Client Secret into Supabase → Authentication → Sign In / Providers → **Google** → Enable → Save.
+
+Until Google is set up, "Continue with Google" shows a friendly "isn't switched on yet" message, and email sign-up still works. Supabase's built-in email sender is rate-limited (a few emails per hour), which only affects *Forgot password* emails. For higher volume, add your own SMTP under Authentication → Emails → SMTP Settings.
 
 ### One-time setup (about 10 minutes)
 
@@ -64,7 +79,7 @@ Under **Plans & prices** the owner edits prices and hides or shows plans. The we
    insert into public.admins (user_id)
    select id from auth.users where email = 'owner@example.com';
    ```
-5. **Authentication → Sign In / Providers:** turn **off** *Allow new users to sign up*. Non-admins can't see any data anyway, but this keeps the user list clean.
+5. **Authentication → Sign In / Providers:** leave *Allow new users to sign up* **on**, because members create their own accounts. Admin access only comes from the `admins` table.
 6. **Project Settings → API:** copy the **Project URL** and the **anon public** key into `assets/js/config.js`, then commit and deploy. Never use the `service_role` key on the website.
 7. Open `https://<your-site>/admin.html`, sign in, and fill in **Payment details**. Each plan on the website then shows **Join & pay**.
 
@@ -72,7 +87,7 @@ Until `config.js` is filled in, the website keeps working exactly as before, wit
 
 ### Security
 
-- The public key can only **read active plans and the UPI settings** and **submit a pending request**. It can never read, change or delete member records (enforced by Postgres row-level security in `schema.sql`).
+- Visitors who aren't logged in can only **read active plans and the UPI settings**. **Logged-in members** can submit a pending request (automatically linked to their account and email) and read **only their own** records. They can't change or delete anything, and only admins see other people's data. All of this is enforced by Postgres row-level security in `schema.sql`.
 - The **price, plan length and status are set by the database**, not the browser, so nobody can submit a lower amount or mark themselves active.
 - Duplicate UPI transaction IDs are rejected, and a phone number can have at most 3 pending requests per day.
 - Member names and other text are HTML-escaped in the dashboard, and the CSV export guards against spreadsheet formula injection.

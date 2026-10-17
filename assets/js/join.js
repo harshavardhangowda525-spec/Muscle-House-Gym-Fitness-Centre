@@ -2,8 +2,9 @@
  *
  * Without a configured backend (assets/js/config.js) the page keeps its static
  * prices and "Enquire now" buttons. With one, prices come from the database
- * and members can pay by UPI QR. Payments are never auto-confirmed: the
- * request is stored as "pending" until the gym owner verifies it.
+ * and logged-in members can pay by UPI QR (auth.js handles login). Payments
+ * are never auto-confirmed: the request is stored as "pending" until the gym
+ * owner verifies it.
  */
 (function () {
   "use strict";
@@ -21,6 +22,7 @@
     res[0].forEach(function (p) { plans[p.id] = p; });
     settings = res[1][0] || null;
     updateCards();
+    resumeAfterRedirect();
   }).catch(function (err) {
     // Keep the static page as-is; enquiries still work.
     if (window.console) console.warn("Membership data unavailable:", err.message);
@@ -73,10 +75,35 @@
     window.setTimeout(function () { var el = $(focusTarget); if (el) el.focus(); }, 30);
   }
 
+  /* Join requires a member login; after logging in the dialog opens for the chosen plan. */
+  function startJoin(planId) {
+    var p = plans[planId];
+    if (!p || !settings || !settings.upi_id || !MH.auth) return;
+    MH.auth.require({
+      plan: planId,
+      reason: "Log in or create a free account to join the " + p.name + " plan.",
+      then: function () { open(planId); }
+    });
+  }
+
+  /* Coming back from Google sign-in with ?join=<plan> */
+  function resumeAfterRedirect() {
+    var plan = new URLSearchParams(location.search).get("join");
+    if (!plan || !MH.auth) return;
+    // Drop ?join=…; leave any login token in the hash for Supabase to consume.
+    history.replaceState(null, "", location.pathname + (/access_token|code=/.test(location.hash) ? location.hash : "#membership"));
+    MH.auth.onChange(function once(u) {
+      if (u && plan) { var id = plan; plan = null; open(id); }
+    });
+  }
+
   function open(planId) {
     var p = plans[planId];
-    if (!p || !settings || !settings.upi_id) return;
+    var u = MH.auth && MH.auth.user();
+    if (!p || !settings || !settings.upi_id || !u) return;
     state.plan = p;
+    $("[data-j-user]").textContent = u.email || "";
+    if (!$("#j-name").value) $("#j-name").value = MH.auth.name();
     $("[data-j-plan]").textContent = p.name;
     $("[data-j-amount]").textContent = MH.inr(p.price);
     $("[data-j-duration]").textContent = p.months === 1 ? "1 month" : p.months + " months";
@@ -95,11 +122,12 @@
   dialog.addEventListener("click", function (e) {
     if (e.target === dialog) close();                 // click on backdrop
     if (e.target.closest("[data-join-close]")) close();
+    if (e.target.closest("[data-j-account]") && MH.auth) MH.auth.openAccount();
   });
 
   document.addEventListener("click", function (e) {
     var btn = e.target.closest("[data-join]");
-    if (btn) open(btn.getAttribute("data-join"));
+    if (btn) startJoin(btn.getAttribute("data-join"));
   });
 
   /* ---------- Validation ---------- */
@@ -168,11 +196,10 @@
     errBox.hidden = true;
     submit.disabled = true; submit.textContent = "Submitting…";
 
-    MH.rest("memberships", {
-      method: "POST",
-      prefer: "return=minimal",
-      body: { full_name: state.name, phone: state.phone, plan_id: state.plan.id, upi_ref: ref }
-    }).then(function () {
+    MH.db.from("memberships").insert({
+      full_name: state.name, phone: state.phone, plan_id: state.plan.id, upi_ref: ref
+    }).then(function (r) {
+      if (r.error) throw r.error;
       state.ref = ref;
       $("[data-j-amount3]").textContent = MH.inr(state.plan.price);
       $("[data-j-ref]").textContent = ref;
@@ -183,9 +210,10 @@
     }).catch(function (err) {
       var msg =
         err.code === "23505" ? "This transaction ID has already been submitted. If you think this is a mistake, please call the gym." :
-        err.code === "P0001" ? "There are already several pending requests for this phone number. Please call the gym." :
-        err.status ? "We couldn't save your request. Please check the transaction ID and try again." :
-        "We couldn't reach the server. Check your connection and try again.";
+        err.code === "P0001" ? "You already have several pending requests. Please wait for the gym to verify them, or call." :
+        err.code === "42501" || /jwt|log in/i.test(err.message || "") ? "Your login has expired. Please log in again and resubmit." :
+        /fetch|network/i.test(err.message || "") ? "We couldn't reach the server. Check your connection and try again." :
+        "We couldn't save your request. Please check the transaction ID and try again.";
       errBox.innerHTML = "<strong>Nothing was submitted.</strong>" + msg + ' You can also call <a href="tel:+916363342090">063633 42090</a>.';
       errBox.hidden = false;
     }).then(function () {

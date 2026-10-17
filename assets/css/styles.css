@@ -158,7 +158,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   -webkit-backdrop-filter: blur(18px) saturate(140%);
   border-bottom-color: var(--line);
 }
-.nav__inner { height: var(--nav-h); display: flex; align-items: center; gap: 2rem; }
+.nav__inner { height: var(--nav-h); display: flex; align-items: center; gap: clamp(.6rem, 2vw, 2rem); }
 
 .wordmark { display: inline-flex; align-items: center; gap: .7rem; text-decoration: none; }
 .wordmark__mark {
@@ -421,6 +421,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   box-shadow: 0 40px 120px -20px rgba(0,0,0,.95);
 }
 .join[open] { animation: menu-in .35s var(--ease); }
+.join [hidden] { display: none !important; }
 .join::backdrop { background: rgba(5,5,5,.78); backdrop-filter: blur(6px); }
 .join__close {
   position: absolute; top: .75rem; right: .75rem; width: 44px; height: 44px; border-radius: var(--radius);
@@ -460,6 +461,50 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .join__done p { color: #D9D7D2; }
 .join__badge { justify-self: start; padding: .35rem .75rem; border: 1px solid rgba(255,196,0,.5); background: rgba(255,196,0,.08); color: #FFD666; border-radius: 999px; font-size: .7rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
 .join__fine { font-size: .85rem; color: var(--steel) !important; }
+
+/* ---------- Member account ---------- */
+.nav__account {
+  display: inline-flex; align-items: center; gap: .5rem; min-height: 44px; padding: .5rem .9rem; margin-left: auto;
+  background: rgba(245,243,239,.05); border: 1px solid var(--line-strong); border-radius: var(--radius); color: var(--offwhite); cursor: pointer;
+  font-size: .72rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; white-space: nowrap; max-width: 12rem;
+  transition: border-color .3s var(--ease), color .3s var(--ease);
+}
+.nav__account span { overflow: hidden; text-overflow: ellipsis; }
+.nav__account:hover { border-color: var(--lime); color: var(--lime); }
+.nav__account-icon { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+[data-account-btn][hidden] { display: none !important; }
+.nav__account:not([hidden]) ~ .nav__toggle { margin-left: 0; }
+@media (max-width: 420px) { .nav__account span { display: none; } .nav__account { padding: .5rem .75rem; } }
+@media (min-width: 960px) { .nav__account { margin-left: 0; } }
+
+.btn--google { --bg: #fff; --fg: #1f1f1f; --bd: #fff; --fill: #e8e8e8; gap: .75rem; letter-spacing: .04em; text-transform: none; font-size: .95rem; }
+.btn--google svg { width: 20px; height: 20px; flex: none; }
+.btn--google:hover, .btn--google:focus-visible { --fg: #1f1f1f; }
+.auth__or { display: flex; align-items: center; gap: .75rem; margin: 1.25rem 0; color: var(--steel); font-size: .75rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+.auth__or::before, .auth__or::after { content: ""; flex: 1; height: 1px; background: var(--line-strong); }
+.auth__tabs { display: grid; grid-template-columns: 1fr 1fr; margin-bottom: 1.25rem; border: 1px solid var(--line-strong); border-radius: var(--radius); overflow: hidden; }
+.auth__tabs button { min-height: 44px; background: transparent; border: 0; color: var(--steel); cursor: pointer; font-size: .75rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+.auth__tabs button[aria-selected="true"] { background: rgba(198,255,0,.1); color: var(--offwhite); box-shadow: inset 0 -2px 0 var(--lime); }
+.auth__link { justify-self: center; background: none; border: 0; color: var(--steel); cursor: pointer; font-size: .85rem; text-decoration: underline; text-underline-offset: 3px; padding: .25rem; }
+.auth__link:hover { color: var(--lime); }
+.auth__text { color: #D9D7D2; font-size: .93rem; }
+.auth__fine { margin-top: 1rem; font-size: .78rem; color: var(--steel-dark); text-align: center; }
+.auth [data-a-status] { margin-top: 1rem; }
+.join__user { margin-bottom: 1rem; font-size: .85rem; color: var(--steel); }
+.join__user strong { color: var(--offwhite); word-break: break-all; }
+
+.acc__list { display: grid; gap: .75rem; margin-bottom: 1.5rem; }
+.acc__item { display: grid; gap: .5rem; padding: 1rem 1.1rem; border: 1px solid var(--line-strong); border-radius: 6px; background: rgba(9,9,9,.5); }
+.acc__top { display: flex; justify-content: space-between; gap: 1rem; font-size: 1.05rem; }
+.acc__detail { color: #D9D7D2; font-size: .9rem; }
+.acc__ref { color: var(--steel); font-size: .8rem; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+.acc__empty { color: var(--steel); padding: 1rem 0; }
+.badge { justify-self: start; display: inline-block; padding: .25rem .6rem; border-radius: 999px; font-size: .68rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; border: 1px solid; }
+.badge--pending  { color: #FFD666; border-color: rgba(255,214,102,.45); background: rgba(255,214,102,.08); }
+.badge--active   { color: var(--lime); border-color: rgba(198,255,0,.45); background: rgba(198,255,0,.08); }
+.badge--expiring { color: #FFB86B; border-color: rgba(255,184,107,.45); background: rgba(255,184,107,.08); }
+.badge--expired  { color: var(--steel); border-color: var(--line-strong); }
+.badge--rejected { color: #FF8A80; border-color: rgba(255,107,94,.45); background: rgba(255,107,94,.08); }
 
 /* ---------- 6. Reviews ---------- */
 .reviews__head { display: grid; gap: 2rem; align-items: end; margin-bottom: clamp(2.5rem, 6vw, 4rem); }
