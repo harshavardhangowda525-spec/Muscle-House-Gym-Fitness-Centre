@@ -10,7 +10,6 @@
  * page shows setup instructions.
  */
 window.MH_CONFIG = {
-  supabaseUrl: "https://sfpsulaowjjrsctgadye.supabase.co/rest/v1/"
-,
+  supabaseUrl: "https://sfpsulaowjjrsctgadye.supabase.co",
   supabaseAnonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNmcHN1bGFvd2pqcnNjdGdhZHllIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIyMjUyNDcsImV4cCI6MjEwNzgwMTI0N30.UJt-sicoLRouE4AP19usrbSDEcTnF4sN0NvVct7_tRM"
 };

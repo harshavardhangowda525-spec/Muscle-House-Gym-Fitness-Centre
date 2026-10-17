@@ -80,7 +80,13 @@
       $("#a-password").value = "";
       boot(res.data.session);
     }).catch(function (err) {
-      showLoginError(/invalid/i.test(err.message) ? "Incorrect email or password." : err.message);
+      var msg = err.message || "";
+      showLoginError(
+        /invalid login credentials/i.test(msg) ? "Incorrect email or password." :
+        /email not confirmed/i.test(msg) ? "This account isn't confirmed yet. In Supabase → Authentication → Users, open the user and confirm them (or re-create them with Auto Confirm User ticked)." :
+        /invalid api key|no api key/i.test(msg) ? "The Supabase key in assets/js/config.js is wrong. Use the anon public key (starts with eyJ)." :
+        /failed to fetch|network/i.test(msg) ? "Couldn't reach Supabase. Check the Project URL in assets/js/config.js." :
+        "Sign-in failed: " + msg);
     }).then(function () { btn.disabled = false; btn.textContent = "Sign in"; });
   });
 

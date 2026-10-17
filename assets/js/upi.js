@@ -4,6 +4,9 @@
   "use strict";
 
   var cfg = window.MH_CONFIG || {};
+  // Accept a pasted URL with extra path (e.g. ".../rest/v1/") or whitespace.
+  cfg.supabaseUrl = String(cfg.supabaseUrl || "").trim().replace(/\/+(rest|auth)\/v1\/?.*$/, "").replace(/\/+$/, "");
+  cfg.supabaseAnonKey = String(cfg.supabaseAnonKey || "").trim();
 
   function isConfigured() {
     return /^https:\/\/.+/.test(cfg.supabaseUrl || "") && !!cfg.supabaseAnonKey;
@@ -47,7 +50,7 @@
     };
     if (options.body) headers["Content-Type"] = "application/json";
     if (options.prefer) headers.Prefer = options.prefer;
-    return fetch(cfg.supabaseUrl.replace(/\/$/, "") + "/rest/v1/" + path, {
+    return fetch(cfg.supabaseUrl + "/rest/v1/" + path, {
       method: options.method || "GET",
       headers: headers,
       body: options.body ? JSON.stringify(options.body) : undefined
