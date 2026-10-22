@@ -14,6 +14,7 @@ assets/js/config.js    Supabase project URL + public (anon) key: the only file y
 assets/js/core.js      Shared config, rupee formatting and REST helpers
 assets/js/auth.js      Member log in / sign up (email or Google), password reset, "My membership"
 assets/js/join.js      Live plan prices + "Join on WhatsApp" (log in, then WhatsApp the gym)
+assets/js/chat.js      "Ask Muscle House" help assistant (rule-based, runs in the browser, no API key)
 assets/js/admin.js     Dashboard logic
 assets/vendor/         supabase-js 2.45.4 (MIT), bundled locally
 supabase/schema.sql    Database tables, security rules and admin setup: run once in Supabase
@@ -94,6 +95,17 @@ Until `config.js` is filled in, the website keeps working exactly as before, wit
 - The **price and plan length are set by the database** from the plan, not typed in the browser. Duplicate payment references are rejected.
 - Member names and other text are HTML-escaped in the dashboard, and the CSV export guards against spreadsheet formula injection.
 - `admin.html` is marked `noindex`, but it relies on the login and database rules for protection, not on staying hidden.
+
+## Help assistant ("Ask Muscle House")
+
+The chat button in the bottom-right corner opens an **automated FAQ assistant**. It runs entirely in the visitor's browser: **no AI service, no API key, no cost**, and nothing typed into it is sent anywhere.
+
+- It matches questions to topics by keywords and phrases. It tolerates plurals, small typos (for example "pirce", "timmings") and some Hinglish ("fees kitna hai", "gym kaha hai").
+- It answers only from **verified facts** (address, phone, the listed 10:00 PM closing time, Google rating) and **live page data**: current plan prices from the dashboard, whether the sample-price notice is on, whether online joining is available, and whether the visitor is logged in.
+- For anything unconfirmed (opening hours, parking, showers, lockers, classes, diet plans, trials, discounts and similar), it says it doesn't have confirmed details. It then offers **WhatsApp with the question pre-filled**, or a call.
+- Answers include buttons: Get directions, Call, WhatsApp, Log in / My membership, and jump-to-section links.
+
+**Editing answers:** all topics are in the `INTENTS` list in `assets/js/chat.js`. Each has `keys` (words or phrases; `word^2` gives a word more weight) and a `reply`. Gym facts are in the `GYM` object at the top of the file. Once the owner confirms details such as opening hours, update the relevant reply. Remove a facility from the `UNVERIFIED` list once it's confirmed. Bump the `?v=` version in `index.html` after editing.
 
 ## Enquiry form: how it works
 
