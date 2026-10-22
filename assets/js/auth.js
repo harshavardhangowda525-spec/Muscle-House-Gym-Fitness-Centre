@@ -190,7 +190,11 @@
     status();
     db.auth.signInWithOAuth({
       provider: "google",
-      options: { redirectTo: siteUrl + (plan ? "?join=" + encodeURIComponent(plan) : "") }
+      options: {
+        redirectTo: siteUrl + (plan ? "?join=" + encodeURIComponent(plan) : ""),
+        // Always show Google's account chooser instead of silently reusing the last account
+        queryParams: { prompt: "select_account" }
+      }
     }).then(function (r) { if (r.error) status("error", friendly(r.error)); });
   });
 
