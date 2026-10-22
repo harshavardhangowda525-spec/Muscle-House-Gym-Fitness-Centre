@@ -2,8 +2,10 @@
 (function () {
   "use strict";
 
-  // Business contact used by the enquiry hand-off. Change here if the number changes.
-  var WHATSAPP_NUMBER = "916363342090"; // country code + number, digits only
+  // Business WhatsApp number for the enquiry hand-off; set in assets/js/config.js.
+  function whatsappNumber() {
+    return String((window.MH_CONFIG && window.MH_CONFIG.whatsappNumber) || "916363342090").replace(/\D/g, "");
+  }
 
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -216,7 +218,7 @@
       "Preferred contact time: " + data.time +
       (data.message ? "\nMessage: " + data.message : "");
 
-    var url = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(text);
+    var url = "https://wa.me/" + whatsappNumber() + "?text=" + encodeURIComponent(text);
     var win = window.open(url, "_blank");
     if (win) { try { win.opener = null; } catch (err) { /* ignore */ } }
 

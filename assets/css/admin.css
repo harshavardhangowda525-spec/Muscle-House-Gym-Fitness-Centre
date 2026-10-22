@@ -140,3 +140,7 @@ a.sub:hover { color: var(--red-text); }
   box-shadow: 0 20px 50px -15px rgba(0,0,0,.9); max-width: calc(100% - 2rem);
 }
 .toast.is-error { background: #C7372B; color: #fff; }
+
+/* "Sample prices" toggle in Plans & prices */
+.plans-notice { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1.25rem; padding: .9rem 1rem; border: 1px solid var(--line); border-radius: 6px; background: rgba(9,9,9,.5); }
+.plans-notice .admin-fine { margin: 0; }

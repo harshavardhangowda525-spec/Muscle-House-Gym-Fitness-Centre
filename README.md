@@ -5,17 +5,17 @@ A premium, responsive single-page website for **Muscle House Gym & Fitness Centr
 It's a static site (HTML, CSS and vanilla JavaScript) with no build step, so it can be hosted anywhere. Online membership sign-ups and the admin dashboard use a free [Supabase](https://supabase.com) database.
 
 ```
-index.html             All page sections, SEO meta, Open Graph, LocalBusiness JSON-LD, Join & pay dialog
-admin.html             Owner dashboard: members, payment verification, UPI details, plan prices
+index.html             All page sections, SEO meta, Open Graph, LocalBusiness JSON-LD, join/login dialogs
+admin.html             Owner dashboard: members, add/link memberships, plan prices
 assets/css/styles.css  Design system, textures, layout, motion (respects reduced-motion)
 assets/css/admin.css   Dashboard styles
 assets/js/main.js      Nav, mobile menu, parallax, scroll reveals, map lazy-load, enquiry form
 assets/js/config.js    Supabase project URL + public (anon) key: the only file you edit to connect
-assets/js/upi.js       Shared UPI link / QR code / REST helpers
+assets/js/core.js      Shared config, rupee formatting and REST helpers
 assets/js/auth.js      Member log in / sign up (email or Google), password reset, "My membership"
-assets/js/join.js      Live plan prices + the Join & pay (UPI QR) flow on the website
+assets/js/join.js      Live plan prices + "Join on WhatsApp" (log in, then WhatsApp the gym)
 assets/js/admin.js     Dashboard logic
-assets/vendor/         supabase-js 2.45.4 and qrcode-generator 1.4.4 (both MIT), bundled locally
+assets/vendor/         supabase-js 2.45.4 (MIT), bundled locally
 supabase/schema.sql    Database tables, security rules and admin setup: run once in Supabase
 assets/img/            Optimised WebP photography, og.jpg (social preview), favicon.svg
 ```
@@ -44,22 +44,21 @@ Any static host works. Pick one:
 
 After deploying to a final domain, change the relative `og:image` / `twitter:image` URLs in `index.html` to absolute URLs (for example `https://yourdomain.com/assets/img/og.jpg`). Some social platforms need absolute URLs to show the preview image.
 
-## Memberships, UPI payments and the admin dashboard
+## Memberships and the admin dashboard
 
 ### How it works
 
-There's no payment gateway. Members pay the gym's own UPI ID directly by scanning a QR code, so there are no fees, but the website **cannot see whether a payment succeeded**. The owner therefore confirms each payment:
+**There are no online payments.** The client decided against payment integration for now, so members arrange payment with the gym on WhatsApp:
 
-1. **Member (website):** picks a plan → **Join & pay** → **logs in or creates an account** (email + password or **Continue with Google**) → enters name and phone → scans the QR (the amount is pre-filled; on phones there's also an *Open UPI app* button) → pays → enters the UPI transaction ID (UTR) from the receipt → **Submit for verification**. The site says the request is *pending verification*. It never says "paid".
-2. **Owner (`/admin.html`):** signs in → **Members → Pending** → checks that the amount and UTR appear in the bank or UPI app → **Verify**. The membership becomes **Active**, and the end date is set from the plan length. Use **Reject** if the payment isn't there.
+1. **Member (website):** picks a plan → **Join on WhatsApp** → **logs in or creates an account** (email + password or **Continue with Google**) → **Continue on WhatsApp** opens a chat with the gym, pre-filled with the plan, price, name and email, asking for payment details → presses send.
+2. **Owner:** replies on WhatsApp with payment details. Once paid, they open **`/admin.html` → + Add member**, enter the member's name, phone, plan, payment method and **the member's login email**. The membership is saved as **Active**, with the end date set from the plan length.
+3. **Member:** sees it under **My membership** (person icon in the header) as *Active from … to …*. The login email is what links the two. Without it, or if that email has no website login, the membership is still recorded but doesn't appear on the member's page.
 
-The dashboard also shows **Active**, **Expiring in 7 days**, **Expired** and **Rejected** members, plus search, CSV export, and **+ Add member** for walk-in or cash payments.
+The dashboard shows **Active**, **Expiring in 7 days** and **Expired** members, plus search and CSV export. Under **Plans & prices** the owner edits prices, hides or shows plans, and switches the "sample prices" notice on or off. The website updates immediately.
 
-Under **Payment details** the owner enters their **UPI ID** (for example `name@okaxis`) and **payee name**, and can test-scan a preview QR. A bank account number and IFSC can't be encoded in a UPI QR, so use the UPI ID linked to the account. A merchant or business UPI ID is the most reliable for receiving payments. Some UPI apps limit amounts or show warnings when paying a *personal* UPI ID from a QR.
+The gym's WhatsApp number is set once in `assets/js/config.js` (`whatsappNumber`) and is used by both the enquiry form and the join button.
 
-Under **Plans & prices** the owner edits prices and hides or shows plans. The website updates immediately.
-
-Members can open **My membership** (person icon in the header) to see each request's status: *Pending verification*, *Active until …*, *Expired* or *Not approved*. They can also log out there.
+**Re-enabling online payments later:** the earlier UPI QR flow is kept in the git history (commit `62ba1be` and before) and can be restored.
 
 ### Member accounts: Supabase + Google settings
 
@@ -85,15 +84,14 @@ Until Google is set up, "Continue with Google" shows a friendly "isn't switched 
    ```
 5. **Authentication → Sign In / Providers:** leave *Allow new users to sign up* **on**, because members create their own accounts. Admin access only comes from the `admins` table.
 6. **Project Settings → API:** copy the **Project URL** and the **anon public** key into `assets/js/config.js`, then commit and deploy. Never use the `service_role` key on the website.
-7. Open `https://<your-site>/admin.html`, sign in, and fill in **Payment details**. Each plan on the website then shows **Join & pay**.
+7. Open `https://<your-site>/admin.html` and sign in. Each plan on the website now shows **Join on WhatsApp**.
 
 Until `config.js` is filled in, the website keeps working exactly as before, with "Enquire now" buttons and the static sample prices.
 
 ### Security
 
-- Visitors who aren't logged in can only **read active plans and the UPI settings**. **Logged-in members** can submit a pending request (automatically linked to their account and email) and read **only their own** records. They can't change or delete anything, and only admins see other people's data. All of this is enforced by Postgres row-level security in `schema.sql`.
-- The **price, plan length and status are set by the database**, not the browser, so nobody can submit a lower amount or mark themselves active.
-- Duplicate UPI transaction IDs are rejected, and a phone number can have at most 3 pending requests per day.
+- Visitors who aren't logged in can only **read active plans** (and the sample-notice setting). **Logged-in members** can read **only their own** memberships. They can't create, change or delete anything, and only admins can add, see or manage members. All of this is enforced by Postgres row-level security in `schema.sql`.
+- The **price and plan length are set by the database** from the plan, not typed in the browser. Duplicate payment references are rejected.
 - Member names and other text are HTML-escaped in the dashboard, and the CSV export guards against spreadsheet formula injection.
 - `admin.html` is marked `noindex`, but it relies on the login and database rules for protection, not on staying hidden.
 

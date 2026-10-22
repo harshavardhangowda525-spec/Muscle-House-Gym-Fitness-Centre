@@ -6,9 +6,9 @@
 --
 -- Security model
 --   * Visitors (anon key) can only read active plans and the UPI settings.
---   * Logged-in members can submit a membership request (linked to their
---     account) and read their OWN records — never anyone else's, and they
---     can't change or delete anything.
+--   * Logged-in members can read their OWN memberships (linked to their login
+--     by the admin) — never anyone else's — and can't create, change or delete
+--     anything. Members join via WhatsApp; only admins record memberships.
 --   * Prices, plan length and status are set by the database, not the browser,
 --     so a visitor cannot submit a different amount or mark themselves active.
 --   * Only users listed in public.admins can read/manage memberships and change
@@ -143,10 +143,15 @@ begin
             and created_at > now() - interval '1 day') >= 3 then
         raise exception 'Too many pending requests' using errcode = 'P0001';
       end if;
-    elsif new.user_id is not null then
-      -- An admin joining online for their own account (website sends user_id);
-      -- walk-in members added from the dashboard have no user_id.
-      new.email := coalesce(new.email, (select email from auth.users where id = new.user_id));
+    else
+      -- Admin adding a member: link it to the member's website login by email
+      -- (if they have one) so it appears under their "My membership".
+      new.email := nullif(lower(btrim(coalesce(new.email, ''))), '');
+      if new.user_id is null and new.email is not null then
+        new.user_id := (select id from auth.users where lower(email) = new.email limit 1);
+      elsif new.user_id is not null and new.email is null then
+        new.email := (select email from auth.users where id = new.user_id);
+      end if;
     end if;
   else -- UPDATE: plan, price and submission details are immutable
     new.id         := old.id;
@@ -228,9 +233,11 @@ create policy plans_admin_update on public.plans
 
 -- memberships: logged-in members may submit and see only their own records;
 -- only admins may read everything, change or delete
+-- Online payments are switched off: members join via WhatsApp and only admins
+-- record memberships. (To re-enable online requests, change this check to true.)
 drop policy if exists memberships_submit on public.memberships;
 create policy memberships_submit on public.memberships
-  for insert to authenticated with check (true);
+  for insert to authenticated with check (public.is_admin());
 drop policy if exists memberships_admin_read on public.memberships;
 drop policy if exists memberships_read on public.memberships;
 create policy memberships_read on public.memberships

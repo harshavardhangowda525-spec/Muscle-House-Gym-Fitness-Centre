@@ -1,5 +1,5 @@
-/* Shared helpers: UPI payment links, QR codes and Supabase REST access.
- * Used by both the public site (join.js) and the admin dashboard (admin.js). */
+/* Shared helpers: configuration, rupee formatting and Supabase REST access.
+ * Used by both the public site (auth.js, join.js) and the admin dashboard (admin.js). */
 (function () {
   "use strict";
 
@@ -7,33 +7,10 @@
   // Accept a pasted URL with extra path (e.g. ".../rest/v1/") or whitespace.
   cfg.supabaseUrl = String(cfg.supabaseUrl || "").trim().replace(/\/+(rest|auth)\/v1\/?.*$/, "").replace(/\/+$/, "");
   cfg.supabaseAnonKey = String(cfg.supabaseAnonKey || "").trim();
+  cfg.whatsappNumber = String(cfg.whatsappNumber || "916363342090").replace(/\D/g, "");
 
   function isConfigured() {
     return /^https:\/\/.+/.test(cfg.supabaseUrl || "") && !!cfg.supabaseAnonKey;
-  }
-
-  /* Build a standard UPI deep link (NPCI "upi://pay" format). */
-  function upiUrl(opts) {
-    var params = [
-      "pa=" + encodeURIComponent(opts.vpa),
-      "pn=" + encodeURIComponent(opts.payee || "")
-    ];
-    if (opts.amount) params.push("am=" + encodeURIComponent(Number(opts.amount).toFixed(2)));
-    params.push("cu=INR");
-    if (opts.note) params.push("tn=" + encodeURIComponent(String(opts.note).slice(0, 50)));
-    return "upi://pay?" + params.join("&");
-  }
-
-  /* Render text as an SVG QR code into an element. */
-  function renderQr(el, text) {
-    if (!window.qrcode) { el.textContent = "QR code unavailable"; return; }
-    window.qrcode.stringToBytes = window.qrcode.stringToBytesFuncs["UTF-8"];
-    var qr = window.qrcode(0, "M");
-    qr.addData(text, "Byte");
-    qr.make();
-    el.innerHTML = qr.createSvgTag({ cellSize: 4, margin: 2, scalable: true, alt: "UPI payment QR code" });
-    var svg = el.querySelector("svg");
-    if (svg) { svg.setAttribute("role", "img"); svg.setAttribute("aria-label", "UPI payment QR code"); }
   }
 
   function inr(n) {
@@ -64,5 +41,5 @@
     });
   }
 
-  window.MH = { cfg: cfg, isConfigured: isConfigured, upiUrl: upiUrl, renderQr: renderQr, inr: inr, rest: rest };
+  window.MH = { cfg: cfg, isConfigured: isConfigured, inr: inr, rest: rest };
 })();

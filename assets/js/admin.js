@@ -309,20 +309,23 @@
     var phone = $("#da-phone").value.replace(/[\s\-().]/g, "").replace(/^(?:\+?91|0)(?=[6-9]\d{9}$)/, "");
     var method = $("#da-method").value;
     var ref = $("#da-ref").value.replace(/[\s-]/g, "").toUpperCase();
+    var email = $("#da-email").value.trim().toLowerCase();
     var problem =
       name.length < 2 ? "Enter the member's full name." :
       !/^[6-9]\d{9}$/.test(phone) ? "Enter a valid 10-digit mobile number." :
+      email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) ? "Enter a valid email address, or leave it empty." :
       method === "upi" && !/^[A-Z0-9]{6,35}$/.test(ref) ? "Enter the UPI reference for a UPI payment." :
       ref && !/^[A-Z0-9]{6,35}$/.test(ref) ? "The reference should be 6–35 letters or numbers." : "";
     if (problem) { err.textContent = problem; err.hidden = false; return; }
     err.hidden = true;
     db.from("memberships").insert({
       full_name: name, phone: phone, plan_id: $("#da-plan").value, payment_method: method,
+      email: email || null, // the database links the membership to this member's login, if they have one
       upi_ref: ref || null, status: "verified", start_date: $("#da-start").value || istToday()
     }).then(function (r) {
       if (r.error) throw r.error;
       $('[data-dialog="add"]').close();
-      toast(name + " added");
+      toast(name + " added" + (email ? ". They'll see it under My membership if " + email + " has a website login" : ""));
       state.filter = "active";
       return reloadMembers();
     }).catch(function (e2) {
@@ -350,45 +353,25 @@
     URL.revokeObjectURL(a.href);
   });
 
-  /* ---------- Payment details ---------- */
-  var VPA = /^[A-Za-z0-9._-]{2,64}@[A-Za-z][A-Za-z0-9.-]{1,63}$/;
+  /* ---------- "Sample prices" notice toggle (Plans & prices tab) ---------- */
   var sForm = $("[data-settings]");
+  var sStatus = $("[data-settings-status]");
 
   function renderSettings() {
-    var s = state.settings || {};
-    sForm.upi_id.value = s.upi_id || "";
-    sForm.payee_name.value = s.payee_name || "";
-    sForm.show_sample_notice.checked = s.show_sample_notice !== false;
-    preview();
+    sForm.show_sample_notice.checked = !state.settings || state.settings.show_sample_notice !== false;
   }
-  function preview() {
-    var vpa = sForm.upi_id.value.trim(), payee = sForm.payee_name.value.trim();
-    var box = $("[data-preview-qr]");
-    $("[data-preview-payee]").textContent = payee || "your payee name";
-    if (VPA.test(vpa)) MH.renderQr(box, MH.upiUrl({ vpa: vpa, payee: payee }));
-    else box.innerHTML = "<p>Enter a valid UPI ID to preview.</p>";
-  }
-  sForm.upi_id.addEventListener("input", preview);
-  sForm.payee_name.addEventListener("input", preview);
-
-  sForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-    var vpa = sForm.upi_id.value.trim(), payee = sForm.payee_name.value.trim();
-    var e1 = vpa && !VPA.test(vpa) ? "That doesn't look like a UPI ID. It should look like name@bank." : "";
-    var e2 = vpa && payee.length < 2 ? "Enter the name on the account." : "";
-    $("#s-upi-err").textContent = e1; $("#s-payee-err").textContent = e2;
-    if (e1 || e2) return;
-    var status = $("[data-settings-status]");
-    db.from("settings").update({ upi_id: vpa || null, payee_name: payee || null, show_sample_notice: sForm.show_sample_notice.checked })
-      .eq("id", 1).select().maybeSingle().then(function (r) {
-        if (r.error) throw r.error;
-        state.settings = r.data;
-        status.className = "form__status is-success";
-        status.textContent = vpa ? "Saved. Join & pay is now live on the website." : "Saved. Online payment is off; the website shows Enquire buttons.";
-        status.hidden = false;
-      }).catch(function (err) {
-        status.className = "form__status is-error"; status.textContent = err.message; status.hidden = false;
-      });
+  sForm.show_sample_notice.addEventListener("change", function () {
+    var on = sForm.show_sample_notice.checked;
+    sStatus.textContent = "Saving…";
+    db.from("settings").update({ show_sample_notice: on }).eq("id", 1).select().maybeSingle().then(function (r) {
+      if (r.error) throw r.error;
+      state.settings = r.data;
+      sStatus.textContent = on ? "Notice shown on the website." : "Notice hidden on the website.";
+    }).catch(function (err) {
+      sForm.show_sample_notice.checked = !on;
+      sStatus.textContent = "";
+      fail(err);
+    });
   });
 
   /* ---------- Plans ---------- */

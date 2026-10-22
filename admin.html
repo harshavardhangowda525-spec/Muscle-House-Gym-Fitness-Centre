@@ -10,8 +10,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/styles.css?v=20261022-2">
-  <link rel="stylesheet" href="assets/css/admin.css?v=20261022-2">
+  <link rel="stylesheet" href="assets/css/styles.css?v=20261022-3">
+  <link rel="stylesheet" href="assets/css/admin.css?v=20261022-3">
 </head>
 <body class="admin">
 
@@ -67,7 +67,6 @@
         <span class="topbar__tag">Admin</span>
         <nav class="tabs" role="tablist" aria-label="Dashboard sections">
           <button role="tab" aria-selected="true" aria-controls="tab-members" id="tabbtn-members" data-tab="members">Members</button>
-          <button role="tab" aria-selected="false" aria-controls="tab-payments" id="tabbtn-payments" data-tab="payments" tabindex="-1">Payment details</button>
           <button role="tab" aria-selected="false" aria-controls="tab-plans" id="tabbtn-plans" data-tab="plans" tabindex="-1">Plans &amp; prices</button>
         </nav>
         <div class="topbar__user">
@@ -121,41 +120,7 @@
           </table>
           <p class="empty" data-empty hidden>No members match this view.</p>
         </div>
-        <p class="admin-fine">Payments made by QR go straight to your UPI account. Before you tap <strong>Verify</strong>, check that the amount and UPI reference appear in your bank or UPI app.</p>
-      </section>
-
-      <!-- PAYMENT DETAILS -->
-      <section id="tab-payments" role="tabpanel" aria-labelledby="tabbtn-payments" data-panel="payments" hidden>
-        <div class="panel-grid">
-          <form class="card" data-settings novalidate>
-            <h2 class="card__title">Payment details</h2>
-            <p class="card__lede">Members scan a QR built from these details and pay you directly. There's no payment gateway and no fees.</p>
-            <div class="field">
-              <label for="s-upi">UPI ID (VPA)</label>
-              <input id="s-upi" name="upi_id" type="text" autocomplete="off" spellcheck="false" placeholder="e.g. musclehouse@okaxis" aria-describedby="s-upi-hint s-upi-err">
-              <p class="field__hint" id="s-upi-hint">Find it in GPay, PhonePe, Paytm or your bank app under your profile. A bank account number and IFSC can't go into a UPI QR, so use the UPI ID linked to that account. A merchant or business UPI ID is the most reliable for receiving payments.</p>
-              <p class="field__error" id="s-upi-err" aria-live="polite"></p>
-            </div>
-            <div class="field">
-              <label for="s-payee">Payee name</label>
-              <input id="s-payee" name="payee_name" type="text" maxlength="60" placeholder="Name on the account" aria-describedby="s-payee-err">
-              <p class="field__error" id="s-payee-err" aria-live="polite"></p>
-            </div>
-            <label class="check">
-              <input type="checkbox" name="show_sample_notice">
-              <span>Show the "sample prices" notice on the website</span>
-            </label>
-            <div class="form__status" role="status" data-settings-status hidden></div>
-            <button class="btn btn--accent" type="submit">Save payment details</button>
-          </form>
-
-          <div class="card card--qr">
-            <h2 class="card__title">Test your QR</h2>
-            <div class="qr-preview" data-preview-qr><p>Enter a UPI ID to preview.</p></div>
-            <p class="card__lede">Scan this with your own phone. Your UPI app should show <strong data-preview-payee>your payee name</strong>. Close the app without paying.</p>
-            <p class="admin-fine">When online payment is on (UPI ID and payee name saved), each plan on the website shows <strong>Join &amp; pay</strong>.</p>
-          </div>
-        </div>
+        <p class="admin-fine">Members join by messaging you on WhatsApp. After you receive their payment, use <strong>+ Add member</strong> and enter their login email, so the membership appears under <strong>My membership</strong> on the website.</p>
       </section>
 
       <!-- PLANS -->
@@ -163,6 +128,13 @@
         <div class="card">
           <h2 class="card__title">Plans &amp; prices</h2>
           <p class="card__lede">Prices update on the website immediately. Existing memberships keep the price they were bought at.</p>
+          <form class="plans-notice" data-settings novalidate>
+            <label class="check">
+              <input type="checkbox" name="show_sample_notice">
+              <span>Show the "sample prices" notice on the website</span>
+            </label>
+            <span class="admin-fine" data-settings-status role="status"></span>
+          </form>
           <div class="table-wrap">
             <table class="ptable">
               <thead><tr><th scope="col">Plan</th><th scope="col">Length</th><th scope="col">Price (₹)</th><th scope="col">Shown on website</th><th scope="col"><span class="sr-only">Save</span></th></tr></thead>
@@ -225,16 +197,17 @@
   <dialog class="adialog" data-dialog="add" aria-labelledby="da-title">
     <form method="dialog" class="adialog__body" data-add-form novalidate>
       <h2 id="da-title">Add member</h2>
-      <p class="admin-fine">For walk-in or cash payments. The member is added as active.</p>
+      <p class="admin-fine">Record a membership after you've received the payment (WhatsApp, cash or walk-in). The member is added as active.</p>
       <div class="field"><label for="da-name">Full name</label><input id="da-name" name="full_name" type="text" maxlength="80" required></div>
       <div class="field"><label for="da-phone">Phone</label><input id="da-phone" name="phone" type="tel" required placeholder="10-digit mobile"></div>
+      <div class="field"><label for="da-email">Member's login email <span class="optional">(optional: shows it under their "My membership")</span></label><input id="da-email" name="email" type="email" autocomplete="off" placeholder="The email they log in to the website with"></div>
       <div class="field-row">
         <div class="field"><label for="da-plan">Plan</label><select id="da-plan" name="plan_id" required data-add-plans></select></div>
         <div class="field"><label for="da-method">Paid by</label>
           <select id="da-method" name="payment_method"><option value="cash">Cash</option><option value="upi">UPI</option><option value="other">Other</option></select>
         </div>
       </div>
-      <div class="field"><label for="da-ref">UPI reference <span class="optional">(required for UPI)</span></label><input id="da-ref" name="upi_ref" type="text" maxlength="40"></div>
+      <div class="field"><label for="da-ref">Payment reference <span class="optional">(required for UPI)</span></label><input id="da-ref" name="upi_ref" type="text" maxlength="40"></div>
       <div class="field"><label for="da-start">Membership starts</label><input id="da-start" name="start_date" type="date" required></div>
       <div class="form__status is-error" role="alert" data-add-error hidden></div>
       <div class="adialog__actions">
@@ -246,10 +219,9 @@
 
   <div class="toast" role="status" aria-live="polite" data-toast hidden></div>
 
-  <script src="assets/js/config.js?v=20261022-2"></script>
+  <script src="assets/js/config.js?v=20261022-3"></script>
   <script src="assets/vendor/supabase-2.45.4.min.js"></script>
-  <script src="assets/vendor/qrcode-generator-1.4.4.js"></script>
-  <script src="assets/js/upi.js?v=20261022-2"></script>
-  <script src="assets/js/admin.js?v=20261022-2"></script>
+  <script src="assets/js/core.js?v=20261022-3"></script>
+  <script src="assets/js/admin.js?v=20261022-3"></script>
 </body>
 </html>

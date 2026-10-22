@@ -49,7 +49,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="preload" as="image" href="assets/img/hero.webp" fetchpriority="high">
-  <link rel="stylesheet" href="assets/css/styles.css?v=20261022-2">
+  <link rel="stylesheet" href="assets/css/styles.css?v=20261022-3">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -288,7 +288,7 @@
               <li data-save hidden>Save ₹0 vs monthly</li>
             </ul>
             <div class="plan__actions">
-              <button class="btn btn--ghost btn--block" type="button" data-join="monthly" hidden>Join &amp; pay<span class="sr-only"> for the Monthly plan</span></button>
+              <button class="btn btn--ghost btn--block" type="button" data-join="monthly" hidden>Join on WhatsApp<span class="sr-only"> for the Monthly plan</span></button>
               <a class="btn btn--ghost btn--block" href="#enquire" data-plan="Monthly" data-enquire-primary>Enquire now<span class="sr-only"> about the Monthly plan</span></a>
               <a class="plan__enquire" href="#enquire" data-plan="Monthly" data-enquire-secondary hidden>or enquire first</a>
             </div>
@@ -304,7 +304,7 @@
               <li data-save>Save ₹500 vs monthly</li>
             </ul>
             <div class="plan__actions">
-              <button class="btn btn--ghost btn--block" type="button" data-join="quarterly" hidden>Join &amp; pay<span class="sr-only"> for the Quarterly plan</span></button>
+              <button class="btn btn--ghost btn--block" type="button" data-join="quarterly" hidden>Join on WhatsApp<span class="sr-only"> for the Quarterly plan</span></button>
               <a class="btn btn--ghost btn--block" href="#enquire" data-plan="Quarterly" data-enquire-primary>Enquire now<span class="sr-only"> about the Quarterly plan</span></a>
               <a class="plan__enquire" href="#enquire" data-plan="Quarterly" data-enquire-secondary hidden>or enquire first</a>
             </div>
@@ -320,7 +320,7 @@
               <li data-save>Save ₹2,500 vs monthly</li>
             </ul>
             <div class="plan__actions">
-              <button class="btn btn--ghost btn--block" type="button" data-join="half-yearly" hidden>Join &amp; pay<span class="sr-only"> for the Half-Yearly plan</span></button>
+              <button class="btn btn--ghost btn--block" type="button" data-join="half-yearly" hidden>Join on WhatsApp<span class="sr-only"> for the Half-Yearly plan</span></button>
               <a class="btn btn--ghost btn--block" href="#enquire" data-plan="Half-Yearly" data-enquire-primary>Enquire now<span class="sr-only"> about the Half-Yearly plan</span></a>
               <a class="plan__enquire" href="#enquire" data-plan="Half-Yearly" data-enquire-secondary hidden>or enquire first</a>
             </div>
@@ -337,7 +337,7 @@
               <li data-save>Save ₹8,000 vs monthly</li>
             </ul>
             <div class="plan__actions">
-              <button class="btn btn--accent btn--block" type="button" data-join="annual" hidden>Join &amp; pay<span class="sr-only"> for the Annual plan</span></button>
+              <button class="btn btn--accent btn--block" type="button" data-join="annual" hidden>Join on WhatsApp<span class="sr-only"> for the Annual plan</span></button>
               <a class="btn btn--accent btn--block" href="#enquire" data-plan="Annual" data-enquire-primary>Enquire now<span class="sr-only"> about the Annual plan</span></a>
               <a class="plan__enquire" href="#enquire" data-plan="Annual" data-enquire-secondary hidden>or enquire first</a>
             </div>
@@ -544,69 +544,23 @@
   </footer>
 
 
-  <!-- ============ JOIN & PAY DIALOG (UPI QR, no payment gateway) ============ -->
+  <!-- ============ JOIN ON WHATSAPP (no online payment) ============ -->
   <dialog class="join" id="join-dialog" aria-labelledby="join-title">
     <button class="join__close" type="button" data-join-close aria-label="Close">×</button>
     <header class="join__head">
       <p class="label">Join Muscle House</p>
       <h2 class="join__title" id="join-title"><span data-j-plan>Plan</span> plan</h2>
       <p class="join__amount"><strong data-j-amount>₹0</strong> · <span data-j-duration></span></p>
-      <ol class="join__steps" aria-label="Steps">
-        <li data-step-dot="1" class="is-current"><span>1</span>Details</li>
-        <li data-step-dot="2"><span>2</span>Pay</li>
-        <li data-step-dot="3"><span>3</span>Confirm</li>
-      </ol>
     </header>
-
-    <section class="join__step" data-step="1">
+    <section class="join__step">
       <p class="join__user">Signed in as <strong data-j-user></strong></p>
-      <form class="join__form" data-join-details novalidate>
-        <div class="field">
-          <label for="j-name">Full name <span aria-hidden="true">*</span></label>
-          <input id="j-name" name="name" type="text" autocomplete="name" required maxlength="80" aria-describedby="j-name-err">
-          <p class="field__error" id="j-name-err" aria-live="polite"></p>
-        </div>
-        <div class="field">
-          <label for="j-phone">Phone number <span aria-hidden="true">*</span></label>
-          <input id="j-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required placeholder="e.g. 98765 43210" aria-describedby="j-phone-err">
-          <p class="field__error" id="j-phone-err" aria-live="polite"></p>
-        </div>
-        <button class="btn btn--accent btn--block" type="submit">Continue to payment <span class="btn__arrow" aria-hidden="true">→</span></button>
-      </form>
-    </section>
-
-    <section class="join__step" data-step="2" hidden>
-      <div class="join__pay">
-        <div class="join__qr" data-j-qr></div>
-        <p class="join__scan">Scan to pay <strong data-j-amount2></strong> with GPay, PhonePe, Paytm or any UPI app</p>
-        <a class="btn btn--ghost btn--block join__app" data-j-app href="#">Open UPI app</a>
+      <p class="join__text">Continue on WhatsApp to confirm your membership with the gym. Your message with the plan and your details is ready, so just press <strong>send</strong>. Muscle House will reply with the payment details.</p>
+      <a class="btn btn--whatsapp btn--block btn--lg" data-j-wa href="#" target="_blank" rel="noopener"><svg class="btn__wa" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.6.3a2.6 2.6 0 0 0-.8 1.9c0 1.1.8 2.2.9 2.4.1.1 1.6 2.5 4 3.5 1.5.6 2 .7 2.8.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2l-.4-.3Z"/></svg>Continue on WhatsApp</a>
+      <div class="join__row join__row--sub">
+        <button class="btn btn--ghost" type="button" data-j-account>My membership</button>
+        <a class="btn btn--ghost" href="tel:+916363342090">Call the gym</a>
       </div>
-      <form class="join__form" data-join-pay novalidate>
-        <div class="field">
-          <label for="j-ref">UPI transaction ID (UTR) <span aria-hidden="true">*</span></label>
-          <input id="j-ref" name="ref" type="text" inputmode="text" autocomplete="off" required maxlength="40" placeholder="e.g. 412345678901" aria-describedby="j-ref-hint j-ref-err">
-          <p class="field__hint" id="j-ref-hint">After paying, copy the 12-digit UTR / UPI reference number from your payment receipt.</p>
-          <p class="field__error" id="j-ref-err" aria-live="polite"></p>
-        </div>
-        <div class="form__status is-error" role="alert" data-j-error hidden></div>
-        <div class="join__row">
-          <button class="btn btn--ghost" type="button" data-j-back>← Back</button>
-          <button class="btn btn--accent" type="submit" data-j-submit>Submit for verification</button>
-        </div>
-      </form>
-    </section>
-
-    <section class="join__step" data-step="3" hidden>
-      <div class="join__done" tabindex="-1" data-j-done>
-        <p class="join__badge">Pending verification</p>
-        <h3>Request received.</h3>
-        <p>Muscle House will check your payment of <strong data-j-amount3></strong> (UPI ref <strong data-j-ref></strong>) and confirm your <span data-j-plan2></span> membership on <strong data-j-phone></strong>.</p>
-        <p class="join__fine">Your membership becomes active once the gym has verified the payment. Keep your UPI receipt until then.</p>
-        <div class="join__row">
-          <button class="btn btn--ghost" type="button" data-join-close data-j-account>My membership</button>
-          <button class="btn btn--accent" type="button" data-join-close>Done</button>
-        </div>
-      </div>
+      <p class="join__fine">Your membership appears under <strong>My membership</strong> once the gym has confirmed it.</p>
     </section>
   </dialog>
 
@@ -676,12 +630,11 @@
     </div>
   </dialog>
 
-  <script src="assets/js/main.js?v=20261022-2" defer></script>
-  <script src="assets/js/config.js?v=20261022-2" defer></script>
-  <script src="assets/vendor/qrcode-generator-1.4.4.js" defer></script>
+  <script src="assets/js/config.js?v=20261022-3" defer></script>
+  <script src="assets/js/main.js?v=20261022-3" defer></script>
   <script src="assets/vendor/supabase-2.45.4.min.js" defer></script>
-  <script src="assets/js/upi.js?v=20261022-2" defer></script>
-  <script src="assets/js/auth.js?v=20261022-2" defer></script>
-  <script src="assets/js/join.js?v=20261022-2" defer></script>
+  <script src="assets/js/core.js?v=20261022-3" defer></script>
+  <script src="assets/js/auth.js?v=20261022-3" defer></script>
+  <script src="assets/js/join.js?v=20261022-3" defer></script>
 </body>
 </html>

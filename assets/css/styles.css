@@ -418,7 +418,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .plans__foot a { color: var(--offwhite); font-weight: 700; }
 .plans__foot a:hover { color: var(--red-text); }
 
-/* ---------- Join & pay dialog ---------- */
+/* ---------- Dialogs: join (WhatsApp), login, My membership ---------- */
 .join {
   width: min(560px, calc(100% - 2rem)); max-height: calc(100dvh - 2rem); padding: 0; overflow: auto;
   color: var(--offwhite); background: linear-gradient(180deg, #171717, #0c0c0c);
@@ -437,29 +437,17 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .join__title { font-family: var(--font-display); font-weight: 400; font-size: clamp(2rem, 6vw, 2.6rem); line-height: 1; text-transform: uppercase; margin-top: .9rem; padding-right: 3rem; }
 .join__amount { margin-top: .5rem; color: var(--steel); }
 .join__amount strong { color: var(--orange); font-size: 1.15rem; }
-.join__steps { display: flex; gap: 1rem; margin: 1.25rem 0 0; padding: 0; list-style: none; font-size: .72rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--steel-dark); }
-.join__steps li { display: flex; align-items: center; gap: .45rem; }
-.join__steps span { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; border: 1px solid currentColor; font-size: .7rem; letter-spacing: 0; }
-.join__steps .is-current { color: var(--offwhite); }
-.join__steps .is-current span { background: var(--red); border-color: var(--red); color: #fff; }
-.join__steps .is-done { color: var(--orange); }
 .join__step { padding: 1.5rem 1.75rem 1.75rem; }
 .join__form { display: grid; gap: 1.1rem; }
-.join__pay { display: grid; justify-items: center; gap: 1rem; margin-bottom: 1.5rem; text-align: center; }
-.join__qr { width: min(260px, 100%); aspect-ratio: 1; padding: 12px; background: #fff; border-radius: 8px; box-shadow: 0 0 0 1px var(--line-strong), 0 20px 50px -20px rgba(217,44,30,.25); }
-.join__qr svg { display: block; width: 100%; height: 100%; }
-.join__scan { font-size: .92rem; color: #D9D7D2; max-width: 22rem; }
-.join__scan strong { color: var(--orange); }
-.join__app { min-height: 46px; }
-@media (hover: hover) and (pointer: fine) { .join__app { display: none; } }
 .join__row { display: flex; flex-wrap: wrap; gap: .75rem; justify-content: space-between; }
 .join__row .btn { flex: 1 1 160px; }
-.join__done { display: grid; gap: 1rem; }
-.join__done:focus { outline: none; }
-.join__done h3 { font-family: var(--font-display); font-weight: 400; font-size: 2.2rem; text-transform: uppercase; line-height: 1; }
-.join__done p { color: #D9D7D2; }
-.join__badge { justify-self: start; padding: .35rem .75rem; border: 1px solid rgba(255,196,0,.5); background: rgba(255,196,0,.08); color: #FFD666; border-radius: 999px; font-size: .7rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
 .join__fine { font-size: .85rem; color: var(--steel) !important; }
+.join__text { color: #D9D7D2; margin-bottom: 1.5rem; }
+.join__row--sub { margin-top: 1rem; }
+.join__step .join__fine { margin-top: 1.25rem; text-align: center; }
+.btn--whatsapp { --bg: #25D366; --fg: #062612; --bd: #25D366; --fill: #1EBE5A; letter-spacing: .06em; padding-inline: 1.2rem; box-shadow: 0 12px 34px -14px rgba(37,211,102,.55); }
+.btn--whatsapp:hover, .btn--whatsapp:focus-visible { --fg: #062612; }
+.btn__wa { width: 22px; height: 22px; fill: currentColor; flex: none; }
 
 /* ---------- Member account ---------- */
 .nav__account {
