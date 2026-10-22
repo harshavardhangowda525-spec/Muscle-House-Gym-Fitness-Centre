@@ -22,7 +22,7 @@ assets/img/            Optimised WebP photography, og.jpg (social preview), favi
 
 ## Updating files (browser cache)
 
-`index.html` and `admin.html` load the site's CSS and JS with a version tag (`styles.css?v=20261017-5`). GitHub Pages lets browsers cache files for about 10 minutes, so **whenever you change a CSS or JS file, bump that `?v=` value in both HTML files**. Otherwise visitors can get the new page with an old script.
+`index.html` and `admin.html` load the site's CSS and JS with a version tag (`styles.css?v=20261022-1`). GitHub Pages lets browsers cache files for about 10 minutes, so **whenever you change a CSS or JS file, bump that `?v=` value in both HTML files**. Otherwise visitors can get the new page with an old script.
 
 ## Run locally
 
