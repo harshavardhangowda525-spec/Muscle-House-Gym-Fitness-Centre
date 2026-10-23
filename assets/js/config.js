@@ -17,5 +17,5 @@ window.MH_CONFIG = {
   // Google sign-in on the website itself (no supabase.co page): the OAuth "Client ID" from
   // Google Cloud → Google Auth Platform → Clients (ends in .apps.googleusercontent.com).
   // Public by design; never put the Client *Secret* here. Leave empty to use the redirect flow.
-  googleClientId: ""
+  googleClientId: "158488207213-137csauhgdb54g82pcs280vsfqbar6ko.apps.googleusercontent.com"
 };
