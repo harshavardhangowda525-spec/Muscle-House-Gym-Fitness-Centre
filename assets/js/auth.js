@@ -93,6 +93,7 @@
     $("[data-a-reason]").textContent = reason || "Log in to join a plan and see your membership.";
     mode(m);
     if (!dlg.open) dlg.showModal();
+    setupGoogleButton();
   }
   function closeAuth() { if (dlg.open) dlg.close(); }
   dlg.addEventListener("close", function () { if (!user) afterLogin = null; });
@@ -184,6 +185,64 @@
       history.replaceState(null, "", siteUrl);
     }).catch(function (err) { status("error", friendly(err)); }).then(function () { busy(f, false); });
   });
+
+  /* ---------- Google sign-in on the website itself ----------
+   * With a Google Client ID configured, Google's own button opens a popup on this
+   * site and returns an ID token, which Supabase verifies in the background: the
+   * visitor never sees a supabase.co page. Without a Client ID, or if Google's
+   * script can't load (e.g. blocked), the redirect button below is used instead. */
+  var gsiBox = $("[data-a-gsi]"), googleBtn = $("[data-a-google]");
+  var gsiState = "idle", rawNonce = null, gsiScript = null;
+
+  function hex(bytes) { return Array.prototype.map.call(bytes, function (b) { return ("0" + b.toString(16)).slice(-2); }).join(""); }
+  function loadGsi() {
+    if (window.google && window.google.accounts && window.google.accounts.id) return Promise.resolve();
+    if (!gsiScript) gsiScript = new Promise(function (resolve, reject) {
+      var sc = document.createElement("script");
+      sc.src = "https://accounts.google.com/gsi/client"; sc.async = true;
+      sc.onload = function () { window.google && window.google.accounts && window.google.accounts.id ? resolve() : reject(new Error("Google sign-in unavailable")); };
+      sc.onerror = function () { reject(new Error("Google sign-in blocked")); };
+      document.head.appendChild(sc);
+    });
+    return gsiScript;
+  }
+  function setupGoogleButton() {
+    if (!MH.cfg.googleClientId || !window.crypto || !crypto.subtle || gsiState === "loading") return;
+    gsiState = "loading";
+    var nonce = new Uint8Array(16); crypto.getRandomValues(nonce); rawNonce = hex(nonce);
+    loadGsi().then(function () {
+      return crypto.subtle.digest("SHA-256", new TextEncoder().encode(rawNonce));
+    }).then(function (digest) {
+      window.google.accounts.id.initialize({
+        client_id: MH.cfg.googleClientId,
+        callback: onGoogleCredential,
+        nonce: hex(new Uint8Array(digest)), // Google signs the hash; Supabase checks it against rawNonce
+        ux_mode: "popup",
+        auto_select: false,
+        context: "signin"
+      });
+      gsiBox.innerHTML = "";
+      window.google.accounts.id.renderButton(gsiBox, {
+        type: "standard", theme: "filled_black", size: "large", text: "continue_with", shape: "pill",
+        logo_alignment: "center", width: Math.max(220, Math.min(400, Math.round(googleBtn.parentNode.clientWidth || 360)))
+      });
+      gsiBox.hidden = false; googleBtn.hidden = true; gsiState = "ready";
+    }).catch(function () {
+      gsiState = "failed"; gsiBox.hidden = true; googleBtn.hidden = false; // keep the redirect fallback
+    });
+  }
+  function onGoogleCredential(resp) {
+    status();
+    db.auth.signInWithIdToken({ provider: "google", token: resp.credential, nonce: rawNonce }).then(function (r) {
+      if (r.error) throw r.error;
+      user = r.data.user; loggedIn();
+    }).catch(function (err) {
+      status("error", friendly(err));
+    }).then(function () {
+      gsiState = "idle"; // fresh nonce for the next sign-in
+      if (dlg.open) setupGoogleButton();
+    });
+  }
 
   $("[data-a-google]").addEventListener("click", function () {
     var plan = afterLogin && afterLogin.plan;

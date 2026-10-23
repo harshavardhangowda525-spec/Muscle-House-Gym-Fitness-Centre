@@ -73,6 +73,8 @@ After pulling this version, do these once:
 4. **Site address:** Authentication → URL Configuration → *Site URL* = `https://harshavardhangowda525-spec.github.io/Muscle-House-Gym-Fitness-Centre/`. Under *Redirect URLs*, add `https://harshavardhangowda525-spec.github.io/Muscle-House-Gym-Fitness-Centre/**`.
 5. **Google:** create an OAuth client in Google Cloud (Web application). Set *Authorized JavaScript origins* to `https://harshavardhangowda525-spec.github.io` and *Authorized redirect URIs* to `https://<project-ref>.supabase.co/auth/v1/callback`. Paste the Client ID and Client Secret into Supabase → Authentication → Sign In / Providers → **Google** → Enable → Save.
 
+**Google sign-in without the supabase.co page:** set `googleClientId` in `assets/js/config.js` to the OAuth **Client ID** (Google Cloud → Google Auth Platform → Clients; it ends in `.apps.googleusercontent.com`; never use the Client *Secret* here). The login screen then shows Google's own button, which opens a Google popup over the website. Supabase verifies the result in the background, so visitors never land on `supabase.co`. Google shows the app name from **Branding** and the website's address. In Supabase → Authentication → Sign In / Providers → Google, the same Client ID must be listed under **Client IDs**. If Google's script is blocked, or no Client ID is set, the site falls back to the redirect flow.
+
 Until Google is set up, "Continue with Google" shows a friendly "isn't switched on yet" message, and email sign-up still works. Supabase's built-in email sender is rate-limited (a few emails per hour), which only affects *Forgot password* emails. For higher volume, add your own SMTP under Authentication → Emails → SMTP Settings.
 
 ### One-time setup (about 10 minutes)

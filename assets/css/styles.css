@@ -601,6 +601,9 @@ button, input, select, textarea { font: inherit; color: inherit; }
 
 .btn--google { --bg: #fff; --fg: #1f1f1f; --bd: #fff; --fill: #e8e8e8; gap: .75rem; letter-spacing: .04em; text-transform: none; font-size: .95rem; }
 .btn--google svg { width: 20px; height: 20px; flex: none; }
+[data-a-google][hidden], .gsi-btn[hidden] { display: none !important; }
+.gsi-btn { display: flex; justify-content: center; min-height: 44px; }
+.gsi-btn iframe { margin: 0 auto !important; }
 .btn--google:hover, .btn--google:focus-visible { --fg: #1f1f1f; }
 .auth__or { display: flex; align-items: center; gap: .75rem; margin: 1.25rem 0; color: var(--steel); font-size: .75rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
 .auth__or::before, .auth__or::after { content: ""; flex: 1; height: 1px; background: var(--line-strong); }

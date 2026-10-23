@@ -8,6 +8,7 @@
   cfg.supabaseUrl = String(cfg.supabaseUrl || "").trim().replace(/\/+(rest|auth)\/v1\/?.*$/, "").replace(/\/+$/, "");
   cfg.supabaseAnonKey = String(cfg.supabaseAnonKey || "").trim();
   cfg.whatsappNumber = String(cfg.whatsappNumber || "916363342090").replace(/\D/g, "");
+  cfg.googleClientId = String(cfg.googleClientId || "").trim();
 
   function isConfigured() {
     return /^https:\/\/.+/.test(cfg.supabaseUrl || "") && !!cfg.supabaseAnonKey;
