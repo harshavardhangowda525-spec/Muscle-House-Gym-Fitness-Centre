@@ -9,6 +9,11 @@
 
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  /* ---------- Membership "WhatsApp us" uses the configured number ---------- */
+  document.querySelectorAll("[data-call-wa]").forEach(function (a) {
+    a.href = "https://wa.me/" + whatsappNumber() + "?text=" + encodeURIComponent("Hi Muscle House! I'd like to know about your membership plans.");
+  });
+
   /* ---------- Footer year ---------- */
   document.querySelectorAll("[data-year]").forEach(function (el) {
     el.textContent = String(new Date().getFullYear());

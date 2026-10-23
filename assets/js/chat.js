@@ -48,8 +48,15 @@
     });
     return out;
   }
+  // Plan cards can be hidden by the gym (membership by phone only)
+  function plansHidden() { var w = document.querySelector("[data-plans]"); return !!w && w.hidden; }
+  function byPhone(intro) {
+    return { text: [intro, "📞 Call **" + GYM.phoneDisplay + "** and the team will walk you through the membership options and pricing, and help you pick the right plan for your goal."],
+      actions: [{ label: "Call " + GYM.phoneDisplay, href: GYM.phoneTel, kind: "primary" }, { label: "WhatsApp us", href: waLink("Hi Muscle House! I'd like to know about your membership plans."), kind: "wa" }],
+      chips: ["Where is the gym?", "Gym timings", "Personal training"] };
+  }
   function sampleNotice() { var n = document.querySelector("[data-sample-notice]"); return !!n && !n.hidden; }
-  function canJoinOnline() { return Array.prototype.some.call(document.querySelectorAll("[data-join]"), function (b) { return !b.hidden; }); }
+  function canJoinOnline() { return !plansHidden() && Array.prototype.some.call(document.querySelectorAll("[data-join]"), function (b) { return !b.hidden; }); }
   function currentUser() { return window.MH && window.MH.auth ? window.MH.auth.user() : null; }
 
   /* ---------- Text matching ---------- */
@@ -140,6 +147,7 @@
     { id: "plans", keys: ["price^2", "prices^2", "pricing^2", "fee^2", "fees^2", "cost^2", "charge", "charges", "rate", "rates", "plan^1.5", "plans^1.5", "package", "packages",
         "membership", "monthly", "quarterly", "half yearly", "halfyearly", "annual", "yearly", "year", "month", "kitna^2", "kitne", "amount", "how much^2", "subscription", "rupees", "cheapest", "best plan", "best value"],
       reply: function () {
+        if (plansHidden()) return byPhone("Membership plans and prices are shared **over the phone**.");
         var plans = livePlans();
         if (!plans.length) return { text: ["Membership details are shown in the **Membership** section. For current prices, please ask the gym."], actions: [{ label: "See plans", action: "scroll:#membership" }, { label: "Ask on WhatsApp", href: waLink("Hi Muscle House! What are your membership prices?"), kind: "wa" }] };
         var best = plans.filter(function (p) { return p.best; })[0];
@@ -158,6 +166,7 @@
 
     { id: "join", keys: ["join^2", "joining^2", "how to join^2", "enroll", "enrol", "enrollment", "admission", "become a member", "become member", "buy membership", "take membership", "get membership", "start membership", "get a membership^1.5", "buy a membership^1.5", "take a membership^1.5", "want a membership^1.5", "like to join", "want to join", "subscribe", "register for", "sign up for", "new member"],
       reply: function () {
+        if (plansHidden()) return byPhone("Joining is easy: it starts with **one call**.");
         if (!canJoinOnline()) return { text: ["To join, send an enquiry or message the gym on WhatsApp. They'll take you through the plans and payment."], actions: [{ label: "Enquire now", action: "scroll:#enquire" }, { label: "WhatsApp the gym", href: waLink("Hi Muscle House! I'd like to join the gym."), kind: "wa" }] };
         var u = currentUser();
         return { text: ["Joining takes about a minute:"], steps: true,
@@ -167,7 +176,7 @@
       } },
 
     { id: "payment", keys: ["pay^2", "payment^2", "payments", "how to pay^2", "upi", "gpay", "google pay", "phonepe", "paytm", "card", "cash", "online payment", "bank", "transfer money", "qr"],
-      reply: function () { return { text: ["There's **no online payment on this website**. Payment is arranged directly with the gym: after you **Join on WhatsApp**, Muscle House replies with the payment details.", "🔒 The website will never ask for your card number, UPI PIN or OTP. Don't share those with anyone."],
+      reply: function () { return { text: ["There's **no online payment on this website**. Payment is arranged directly with the gym: " + (plansHidden() ? "call **" + GYM.phoneDisplay + "** and the team will explain how to pay." : "after you **Join on WhatsApp**, Muscle House replies with the payment details."), "🔒 The website will never ask for your card number, UPI PIN or OTP. Don't share those with anyone."],
         actions: [{ label: "How to join", ask: "How do I join?" }, { label: "WhatsApp the gym", href: waLink("Hi Muscle House! How can I pay for a membership?"), kind: "wa" }] }; } },
 
     { id: "forgot", keys: ["forgot^3", "forget^3", "reset^3", "reset password^2", "lost password", "change password^2", "password^1.5", "cant login^3", "cannot login^3", "unable to login^3", "login problem^3", "not able to login^3", "login not working^3"],
@@ -246,7 +255,7 @@
 
     { id: "website", keys: ["website^2", "site^2", "how does this work^3", "how this works^3", "how it works^2", "what can you do^3", "features^2", "help^1.5", "guide", "menu", "sections", "use this", "who are you^2", "bot", "chatbot", "assistant"],
       reply: function () { return { text: ["Here's what you can do on this website:"],
-        list: ["**Membership**: see plans and prices, and **Join on WhatsApp**.", "**Log in** (person icon): create an account with email or Google, and check **My membership**.", "**Training, Gallery & Reviews**: get a feel for the gym.", "**Visit**: address, map, directions and tap-to-call.", "**Enquiry form**: send your details and goal on WhatsApp.", "And me! I'm an automated assistant: I answer common questions instantly and pass anything else to the gym."],
+        list: [plansHidden() ? "**Membership**: call **" + GYM.phoneDisplay + "** for plans and pricing." : "**Membership**: see plans and prices, and **Join on WhatsApp**.", "**Log in** (person icon): create an account with email or Google, and check **My membership**.", "**Training, Gallery & Reviews**: get a feel for the gym.", "**Visit**: address, map, directions and tap-to-call.", "**Enquiry form**: send your details and goal on WhatsApp.", "And me! I'm an automated assistant: I answer common questions instantly and pass anything else to the gym."],
         chips: CHIPS_START }; } },
 
     { id: "credit", keys: ["who made^3", "who built^3", "who designed^3", "developer^2", "designer^2", "website developer^3", "made this website^3", "built this website^3", "infinity^2", "web design^2", "website for my business^3", "your website"],

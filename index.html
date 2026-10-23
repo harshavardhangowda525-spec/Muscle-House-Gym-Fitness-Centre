@@ -49,7 +49,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="preload" as="image" href="assets/img/hero.webp" fetchpriority="high">
-  <link rel="stylesheet" href="assets/css/styles.css?v=20261022-5">
+  <link rel="stylesheet" href="assets/css/styles.css?v=20261023-1">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -271,12 +271,32 @@
     <!-- SAMPLE PRICES: placeholders for the preview. Replace with the gym's confirmed pricing and remove the .plans__disclaimer note. -->
     <section class="membership section texture-metal" id="membership" aria-labelledby="membership-title">
       <div class="container">
-        <header class="section-head section-head--split">
-          <div>
-            <p class="label reveal">05 — Membership</p>
-            <h2 class="display-xl reveal" id="membership-title">Choose your <br><span class="accent">commitment.</span></h2>
+        <header class="section-head">
+          <p class="label reveal">05 — Membership</p>
+          <h2 class="display-xl reveal" id="membership-title">One call. <br><span class="accent">A stronger you.</span></h2>
+        </header>
+
+        <!-- Membership by phone. To show the plan cards again, remove `hidden` from [data-plans] below and delete this panel. -->
+        <div class="callplan reveal" data-call-panel>
+          <div class="callplan__copy">
+            <p class="callplan__kicker">Memberships · HSR Layout</p>
+            <p class="callplan__line">Every strong body starts with a first rep, and every Muscle House membership starts with <span class="accent">one call.</span></p>
+            <p class="callplan__text">Talk to our team for membership plans and pricing. Tell us your goal, and we'll help you choose the plan that fits.</p>
           </div>
-          <p class="section-note reveal plans__disclaimer" data-sample-notice>Sample prices shown for preview purposes only. Final pricing is to be confirmed by Muscle House, so please enquire or call for current rates.</p>
+          <div class="callplan__cta">
+            <a class="callplan__number" href="tel:+916363342090" aria-label="Call Muscle House on 063633 42090">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1l-2.3 2.2Z"/></svg>
+              <span>063633 42090</span>
+            </a>
+            <div class="callplan__buttons">
+              <a class="btn btn--accent" href="tel:+916363342090">Call now</a>
+              <a class="btn btn--whatsapp" href="https://wa.me/916363342090?text=Hi%20Muscle%20House!%20I'd%20like%20to%20know%20about%20your%20membership%20plans." target="_blank" rel="noopener" data-call-wa>WhatsApp us</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="plans-wrap" data-plans hidden>
+        <p class="section-note plans__disclaimer" data-sample-notice>Sample prices shown for preview purposes only. Final pricing is to be confirmed by Muscle House, so please enquire or call for current rates.</p>
         </header>
 
         <ul class="plans">
@@ -347,7 +367,8 @@
           </li>
         </ul>
 
-        <p class="plans__foot reveal">Interested in personal training? <a href="#enquire" data-plan="Personal training">Ask us about it</a> or call <a href="tel:+916363342090">063633 42090</a>.</p>
+        <p class="plans__foot">Interested in personal training? <a href="#enquire" data-plan="Personal training">Ask us about it</a> or call <a href="tel:+916363342090">063633 42090</a>.</p>
+        </div>
       </div>
     </section>
 
@@ -636,12 +657,12 @@
     </div>
   </dialog>
 
-  <script src="assets/js/config.js?v=20261022-5" defer></script>
-  <script src="assets/js/main.js?v=20261022-5" defer></script>
+  <script src="assets/js/config.js?v=20261023-1" defer></script>
+  <script src="assets/js/main.js?v=20261023-1" defer></script>
   <script src="assets/vendor/supabase-2.45.4.min.js" defer></script>
-  <script src="assets/js/core.js?v=20261022-5" defer></script>
-  <script src="assets/js/auth.js?v=20261022-5" defer></script>
-  <script src="assets/js/join.js?v=20261022-5" defer></script>
-  <script src="assets/js/chat.js?v=20261022-5" defer></script>
+  <script src="assets/js/core.js?v=20261023-1" defer></script>
+  <script src="assets/js/auth.js?v=20261023-1" defer></script>
+  <script src="assets/js/join.js?v=20261023-1" defer></script>
+  <script src="assets/js/chat.js?v=20261023-1" defer></script>
 </body>
 </html>

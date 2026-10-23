@@ -47,6 +47,8 @@ After deploying to a final domain, change the relative `og:image` / `twitter:ima
 
 ## Memberships and the admin dashboard
 
+> **Current setting: membership by phone.** The plan cards and prices are **hidden** on the website. The Membership section shows a "One call. A stronger you." panel with Call and WhatsApp buttons for **063633 42090**, and the chat assistant points visitors to the phone too. **To show the plans again:** in `index.html`, remove `hidden` from `<div class="plans-wrap" data-plans hidden>` and delete the `[data-call-panel]` block above it. Everything below then works as described.
+
 ### How it works
 
 **There are no online payments.** The client decided against payment integration for now, so members arrange payment with the gym on WhatsApp:
