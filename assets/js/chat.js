@@ -328,13 +328,30 @@
       form = root.querySelector("[data-chat-form]"), input = root.querySelector("[data-chat-input]");
   var started = false;
 
+  // Phones: fit the sheet to the visible viewport so the keyboard never covers the input.
+  var phone = window.matchMedia("(max-width: 640px)"), vv = window.visualViewport;
+  function fit() {
+    document.documentElement.classList.toggle("mhchat-lock", !panel.hidden && phone.matches);
+    if (panel.hidden || !phone.matches) return;
+    panel.style.setProperty("--mh-vvh", (vv ? vv.height : window.innerHeight) + "px");
+    panel.style.setProperty("--mh-vvt", (vv ? vv.offsetTop : 0) + "px");
+    if (document.activeElement === input) scrollLog();
+  }
+  if (vv) { vv.addEventListener("resize", fit); vv.addEventListener("scroll", fit); }
+  window.addEventListener("resize", fit);
+  input.addEventListener("focus", function () { window.setTimeout(fit, 300); });
+
   function openChat() {
     panel.hidden = false; root.classList.add("is-open"); launch.setAttribute("aria-expanded", "true");
+    fit();
     if (!started) { started = true; bot(answer("hello").reply, true); }
-    window.setTimeout(function () { input.focus({ preventScroll: true }); }, 50);
+    // On phones, don't pop the keyboard over the greeting; the visitor taps the box when ready.
+    if (!phone.matches) window.setTimeout(function () { input.focus({ preventScroll: true }); }, 50);
+    else panel.querySelector("[data-chat-close]").focus({ preventScroll: true });
   }
   function closeChat(returnFocus) {
     panel.hidden = true; root.classList.remove("is-open"); launch.setAttribute("aria-expanded", "false");
+    document.documentElement.classList.remove("mhchat-lock");
     if (returnFocus !== false) launch.focus();
   }
   launch.addEventListener("click", function () { if (panel.hidden) openChat(); else closeChat(); });
