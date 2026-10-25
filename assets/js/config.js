@@ -17,5 +17,8 @@ window.MH_CONFIG = {
   // Google sign-in on the website itself (no supabase.co page): the OAuth "Client ID" from
   // Google Cloud → Google Auth Platform → Clients (ends in .apps.googleusercontent.com).
   // Public by design; never put the Client *Secret* here. Leave empty to use the redirect flow.
-  googleClientId: "158488207213-137csauhgdb54g82pcs280vsfqbar6ko.apps.googleusercontent.com"
+  googleClientId: "158488207213-137csauhgdb54g82pcs280vsfqbar6ko.apps.googleusercontent.com",
+  // Future online payment: paste a payment-gateway link (https://…, e.g. a Razorpay/PayU payment
+  // page) and a "Pay online" button appears in the Membership section. Leave empty to hide it.
+  paymentUrl: ""
 };

@@ -421,15 +421,26 @@ button, input, select, textarea { font: inherit; color: inherit; }
 @media (max-width: 899px) { .float-label { right: 1rem; } }
 @keyframes bob { 50% { transform: translateY(-8px); } }
 .intro__copy .display-xl { margin-top: 1.25rem; }
-.intro__facts { margin-top: 2.5rem; display: grid; border-top: 1px solid var(--line); }
-.intro__facts li { display: flex; justify-content: space-between; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--line); }
-.intro__fact-k { font-size: .72rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--steel); }
-.intro__fact-v { text-align: right; font-weight: 600; }
+.intro__text { margin-top: 1.1rem; color: #CFCDC8; }
+.intro__mission { margin-top: 1.75rem; padding: 1.1rem 1.25rem; border-left: 3px solid var(--orange); background: rgba(234,129,7,.06); border-radius: 0 10px 10px 0; }
+.intro__mission-k { display: block; font-size: .7rem; font-weight: 800; letter-spacing: .22em; text-transform: uppercase; color: var(--orange); margin-bottom: .4rem; }
+.intro__mission p { color: var(--offwhite); font-weight: 600; }
+.intro__where { margin-top: 1.5rem; display: flex; gap: .75rem; align-items: flex-start; padding: 1rem 0; border-block: 1px solid var(--line); color: #D9D7D2; font-size: .95rem; }
+.intro__where svg { width: 22px; height: 22px; flex: none; fill: var(--red-text); margin-top: .1rem; }
+.intro__where a { color: var(--orange); font-weight: 700; white-space: nowrap; }
+.intro__tagline { margin-top: 1.5rem; font-family: var(--font-display); font-size: clamp(1.35rem, 2.6vw, 1.8rem); line-height: 1.1; text-transform: uppercase; color: var(--offwhite); }
 
 /* ---------- 3. Training panels ---------- */
 .training { background: radial-gradient(70% 50% at 80% 0%, rgba(217,44,30,.05), transparent 60%), var(--obsidian); }
 .panels { display: grid; gap: 1.25rem; }
-@media (min-width: 760px) { .panels { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 640px) { .panels { grid-template-columns: repeat(2, 1fr); } .panels > :last-child:nth-child(odd) { grid-column: 1 / -1; } }
+@media (min-width: 1000px) {
+  .panels { grid-template-columns: repeat(6, 1fr); }
+  .panels > .panel { grid-column: span 2; }
+  .panels > .panel:nth-child(n+4) { grid-column: span 3; }
+  .panels > .panel:nth-child(n+4) .panel__media { aspect-ratio: 16 / 10; }
+}
+@media (min-width: 640px) and (max-width: 999px) { .panels > :last-child:nth-child(odd) .panel__media { aspect-ratio: 16 / 9; } }
 .panel {
   position: relative; display: flex; flex-direction: column;
   background: linear-gradient(180deg, #161616, #0f0f0f);
@@ -477,6 +488,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .features { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
 @media (min-width: 640px) { .features { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 1080px) { .features { grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 640px) { .features > :last-child:nth-child(odd) { grid-column: span 2; } }
 .feature {
   position: relative; padding: 2.4rem 1.8rem 2.6rem; background: linear-gradient(180deg, #121212, #0b0b0b);
   overflow: hidden; transition: background .5s var(--ease);
@@ -514,10 +526,12 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .callplan__kicker { font-size: .72rem; font-weight: 800; letter-spacing: .24em; text-transform: uppercase; color: var(--orange); }
 .callplan__line { margin-top: .9rem; font-family: var(--font-display); font-size: clamp(1.9rem, 4.2vw, 3.1rem); line-height: 1.05; text-transform: uppercase; color: var(--offwhite); }
 .callplan__text { margin-top: 1.1rem; max-width: 34rem; color: #D9D7D2; }
+.callplan__text + .callplan__text { margin-top: .7rem; }
+.callplan__tag { margin-top: 1.4rem; font-family: var(--font-display); font-size: clamp(1.3rem, 2.4vw, 1.7rem); line-height: 1.1; text-transform: uppercase; color: var(--offwhite); }
 .callplan__cta { position: relative; z-index: 1; display: grid; gap: 1rem; justify-items: stretch; }
 .callplan__number {
   display: flex; align-items: center; justify-content: center; gap: .85rem; padding: 1.1rem 1.25rem; border-radius: 12px; text-decoration: none;
-  font-family: var(--font-display); font-size: clamp(2rem, 5vw, 2.9rem); letter-spacing: .04em; line-height: 1; color: var(--offwhite);
+  font-family: var(--font-display); font-size: clamp(1.6rem, 7.5vw, 2.9rem); letter-spacing: .04em; line-height: 1; color: var(--offwhite); white-space: nowrap;
   background: rgba(9,9,9,.65); border: 1px solid var(--line-strong); transition: border-color .3s var(--ease), color .3s var(--ease), transform .3s var(--ease);
 }
 .callplan__number:hover { border-color: var(--red); color: var(--red-text); transform: translateY(-2px); }
@@ -603,6 +617,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .nav__account:hover { border-color: var(--red); color: var(--red-text); }
 .nav__account-icon { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
 [data-account-btn][hidden] { display: none !important; }
+[data-pay-online][hidden] { display: none !important; }
 .nav__account:not([hidden]) ~ .nav__toggle { margin-left: 0; }
 @media (max-width: 420px) { .nav__account span { display: none; } .nav__account { padding: .5rem .75rem; } }
 @media (min-width: 960px) { .nav__account { margin-left: 0; } }
@@ -684,6 +699,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .location-card dt { font-size: .7rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--steel); }
 .location-card dd { font-size: 1.15rem; font-weight: 700; margin-top: .25rem; }
 .location-card dd a { text-decoration: none; }
+.location-card dd.hours { display: grid; gap: .2rem; font-size: 1rem; }
+.location-card dd.hours b { color: var(--orange); font-weight: 800; margin-right: .35rem; }
 .location-card dd a:hover { color: var(--red-text); }
 .location-card__actions { display: flex; flex-wrap: wrap; gap: .75rem; }
 .location-card__actions .btn { flex: 1 1 180px; }
@@ -778,6 +795,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .footer p a, .footer ul a { text-decoration: none; color: #D9D7D2; transition: color .25s; }
 .footer p a:hover, .footer ul a:hover { color: var(--red-text); }
 .footer address + p { margin-top: .8rem; font-weight: 700; }
+.footer__hours { margin-top: .6rem; color: #D9D7D2; font-size: .9rem; }
 .footer ul { display: grid; gap: .55rem; }
 .footer__base { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .75rem; padding-block: 1.5rem; border-top: 1px solid var(--line); font-size: .8rem; color: var(--steel-dark); }
 

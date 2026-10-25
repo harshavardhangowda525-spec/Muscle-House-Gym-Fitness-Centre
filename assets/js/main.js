@@ -14,6 +14,12 @@
     a.href = "https://wa.me/" + whatsappNumber() + "?text=" + encodeURIComponent("Hi Muscle House! I'd like to know about your membership plans.");
   });
 
+  /* ---------- Future online payment: shown only when paymentUrl is set in config.js ---------- */
+  var payUrl = String((window.MH_CONFIG && window.MH_CONFIG.paymentUrl) || "").trim();
+  if (/^https:\/\//i.test(payUrl)) {
+    document.querySelectorAll("[data-pay-online]").forEach(function (a) { a.href = payUrl; a.hidden = false; });
+  }
+
   /* ---------- Footer year ---------- */
   document.querySelectorAll("[data-year]").forEach(function (el) {
     el.textContent = String(new Date().getFullYear());

@@ -105,11 +105,11 @@ Until `config.js` is filled in, the website keeps working exactly as before, wit
 The chat button in the bottom-right corner opens an **automated FAQ assistant**. It runs entirely in the visitor's browser: **no AI service, no API key, no cost**, and nothing typed into it is sent anywhere.
 
 - It matches questions to topics by keywords and phrases. It tolerates plurals, small typos (for example "pirce", "timmings") and some Hinglish ("fees kitna hai", "gym kaha hai").
-- It answers only from **verified facts** (address, phone, the listed 10:00 PM closing time, Google rating) and **live page data**: current plan prices from the dashboard, whether the sample-price notice is on, whether online joining is available, and whether the visitor is logged in.
-- For anything unconfirmed (opening hours, parking, showers, lockers, classes, diet plans, trials, discounts and similar), it says it doesn't have confirmed details. It then offers **WhatsApp with the question pre-filled**, or a call.
+- It answers only from **verified facts** (address, phone, gym timings, the owner-confirmed facilities and training, Google rating) and **live page data**: current plan prices from the dashboard, whether the sample-price notice is on, whether online joining is available, and whether the visitor is logged in.
+- For anything unconfirmed (parking, changing rooms, diet plans, trials, discounts and similar), it says it doesn't have confirmed details. It then offers **WhatsApp with the question pre-filled**, or a call.
 - Answers include buttons: Get directions, Call, WhatsApp, Log in / My membership, and jump-to-section links.
 
-**Editing answers:** all topics are in the `INTENTS` list in `assets/js/chat.js`. Each has `keys` (words or phrases; `word^2` gives a word more weight) and a `reply`. Gym facts are in the `GYM` object at the top of the file. Once the owner confirms details such as opening hours, update the relevant reply. Remove a facility from the `UNVERIFIED` list once it's confirmed. Bump the `?v=` version in `index.html` after editing.
+**Editing answers:** all topics are in the `INTENTS` list in `assets/js/chat.js`. Each has `keys` (words or phrases; `word^2` gives a word more weight) and a `reply`. Gym facts are in the `GYM` object at the top of the file. When the owner confirms new details, update the relevant reply. Remove a facility from the `UNVERIFIED` list once it's confirmed. Bump the `?v=` version in `index.html` after editing.
 
 ## Enquiry form: how it works
 
@@ -131,7 +131,7 @@ To use real photos of the gym, replace the files and keep the same names:
 |---|---|---|
 | `hero.webp` | Hero background | Landscape 16:9 |
 | `intro.webp` | "More than a workout" | Portrait 4:5 |
-| `strength.webp`, `trainer.webp`, `journey.webp` | Training panels 01–03 | Portrait |
+| `strength.webp`, `cardio.webp`, `trainer.webp`, `yoga.webp`, `group.webp` | Training panels 01–05 | Portrait |
 | `deadlift.webp` | Gallery (wide) | Landscape |
 | `cable.webp`, `chalk.webp` | Gallery (tall) | Portrait |
 | `bench.webp`, `rope.webp` | Gallery | Square or landscape |
@@ -142,9 +142,13 @@ Aim for about 1600px on the long edge, WebP at roughly 70–80% quality. If you 
 
 ## Content accuracy
 
-Only verified facts are used: name, address, phone, the 4.4/5 Google rating from 105 reviews, the listed 10:00 PM closing time, and the three supplied review quotes. Opening hours, trainer credentials, amenities and statistics are deliberately left out.
+Only verified facts are used: name, address, phone, the 4.4/5 Google rating from 105 reviews, the three supplied review quotes, and the content supplied by the gym owner: the About text and mission, the five training types (plus Zumba), the "What makes Muscle House special" list (certified trainers, air conditioning, showers & lockers, post-workout meals and more), the membership wording, and the gym timings (Mon–Sat 6 AM–10 PM, Sun 7 AM–12 PM).
 
-The structured data contains no hours or rating markup.
+The structured data includes the opening hours but no rating markup.
+
+## Online payment (future)
+
+There's no payment gateway yet: membership is by phone or WhatsApp. When the gym is ready, create a payment page with a provider such as Razorpay or PayU and paste its `https://` link as `paymentUrl` in `assets/js/config.js`. A **Pay online** button then appears in the Membership section. Leave it empty to keep the button hidden.
 
 **Membership prices are placeholders** (₹2,000 / ₹5,500 / ₹9,500 / ₹16,000), and the page labels them "sample prices … to be confirmed". Once Supabase is connected, set the real prices in **admin → Plans & prices** and untick *Show the "sample prices" notice* under **Payment details**. Without Supabase, edit the numbers in the `MEMBERSHIP` block of `index.html` and delete the `.plans__disclaimer` note.
 

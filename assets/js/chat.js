@@ -16,7 +16,8 @@
     address: "Indian Coffee House Building, 3rd Floor, 754, 19th Main, 22nd Cross Road, Sector 2, HSR Layout, Bengaluru, Karnataka 560102",
     phoneDisplay: "063633 42090",
     phoneTel: "tel:+916363342090",
-    closing: "10:00 PM",
+    hoursWeek: "6:00 AM – 10:00 PM",
+    hoursSun: "7:00 AM – 12:00 PM",
     rating: "4.4/5",
     reviews: "105",
     directions: "https://www.google.com/maps/dir/?api=1&destination=Muscle%20House%20Gym%20%26%20Fitness%20Centre%2C%20754%2C%2019th%20Main%2C%2022nd%20Cross%20Road%2C%20Sector%202%2C%20HSR%20Layout%2C%20Bengaluru%2C%20Karnataka%20560102",
@@ -113,15 +114,14 @@
   /* ---------- Topics ---------- */
   // Facilities we have NOT verified: never claim them, always hand off.
   var UNVERIFIED = {
-    parking: "parking", park: "parking", shower: "showers", bath: "showers", locker: "lockers",
-    "changing room": "changing rooms", washroom: "washrooms", toilet: "washrooms", ac: "air conditioning",
-    "air conditioned": "air conditioning", aircon: "air conditioning", steam: "steam room", sauna: "sauna",
-    zumba: "Zumba classes", yoga: "yoga classes", crossfit: "CrossFit", aerobic: "aerobics", class: "group classes",
+    parking: "parking", park: "parking",
+    "changing room": "changing rooms", washroom: "washrooms", toilet: "washrooms", steam: "steam room", sauna: "sauna",
+    crossfit: "CrossFit", aerobic: "aerobics",
     diet: "diet plans", nutrition: "diet plans", supplement: "supplements", women: "women-only timings",
     ladies: "women-only timings", female: "women-only timings", couple: "couple memberships", student: "student discounts",
-    discount: "discounts", offer: "offers", refund: "refunds", freeze: "membership freezing", pause: "membership freezing",
+    discount: "discounts", refund: "refunds", freeze: "membership freezing", pause: "membership freezing",
     transfer: "membership transfer", wifi: "Wi-Fi", water: "drinking water", towel: "towels", kid: "age limits", age: "age limits",
-    cardio: "the cardio equipment list", treadmill: "treadmills", cycle: "cycling machines", bike: "cycling machines"
+    treadmill: "the cardio machine list", cycle: "cycling machines", bike: "cycling machines"
   };
   function unverifiedTerms(text) {
     var found = [], tokens = text.split(" ").map(stem);
@@ -204,32 +204,41 @@
           actions: [{ label: u ? "Open My membership" : "Log in to view", action: u ? "account" : "login", kind: "primary" }] };
       } },
 
+    { id: "about", keys: ["about^2", "about muscle house^3", "about the gym^3", "tell me about^3", "mission^3", "vision^2", "what is muscle house^3", "motto^2", "tagline^2", "beginner friendly^3", "all levels^2"],
+      reply: function () { return { text: ["**Muscle House Gym & Fitness Centre** is a fitness centre in HSR Layout, Sector 2, Bengaluru, dedicated to helping people achieve their fitness goals and lead healthier lifestyles.", "It's a motivating, supportive place for **all fitness levels**, from beginners to experienced lifters. Our mission: to help every member become **stronger, healthier and fitter** through quality training, professional guidance and consistent support.", "💪 _Build Strength. Build Confidence. Build a Better You._"],
+        actions: [{ label: "What do you offer?", ask: "What facilities do you have?" }, { label: "Read about us", action: "scroll:#about" }] }; } },
+
     { id: "location", keys: ["where^2", "location^2", "address^2", "located^2", "direction^2", "directions^2", "map^2", "route", "how to reach^2", "reach", "kaha^2", "kahan^2", "elli", "hsr", "landmark", "coffee house", "floor", "near", "nearby", "sector"],
       reply: function () { return { text: ["📍 **" + GYM.name + "**", GYM.address + ".", "It's on the **3rd floor of the Indian Coffee House Building** in HSR Layout Sector 2."],
         actions: [{ label: "Get directions", href: GYM.directions, kind: "primary" }, { label: "See the map", action: "scroll:#contact" }, { label: "Call the gym", href: GYM.phoneTel, kind: "call" }] }; } },
 
     { id: "timings", keys: ["time^2", "timing^2", "timings^2", "hour", "hours^2", "open^2", "opening^2", "close^2", "closing^2", "closes", "schedule", "when", "sunday^1.5", "holiday^1.5", "morning", "evening", "night", "kab^2", "today"],
-      reply: function () { return { text: ["🕙 The gym's **listed closing time is " + GYM.closing + "**.", "Opening hours and weekend/holiday timings aren't listed here yet, so please check with the gym before you visit."],
-        actions: [{ label: "Call " + GYM.phoneDisplay, href: GYM.phoneTel, kind: "call" }, { label: "Ask on WhatsApp", href: waLink("Hi Muscle House! What are your opening hours?"), kind: "wa" }] }; } },
+      reply: function () { return { text: ["🕕 **Gym timings**"],
+        list: ["**Monday – Saturday**: " + GYM.hoursWeek, "**Sunday**: " + GYM.hoursSun],
+        after: ["For holiday timings, please check with the gym."],
+        actions: [{ label: "Get directions", href: GYM.directions, kind: "primary" }, { label: "Call " + GYM.phoneDisplay, href: GYM.phoneTel, kind: "call" }] }; } },
 
     { id: "contact", keys: ["contact^2", "phone^2", "number^2", "call^2", "whatsapp^2", "mobile", "reach you", "talk^2", "speak", "human^2", "person", "staff", "owner", "manager", "talk to the gym^3", "customer care", "support", "help desk"],
       reply: function () { return { text: ["You can reach Muscle House directly:", "📞 **" + GYM.phoneDisplay + "**"],
         actions: [{ label: "Call now", href: GYM.phoneTel, kind: "call" }, { label: "WhatsApp", href: waLink("Hi Muscle House! I have a question."), kind: "wa" }, { label: "Send an enquiry", action: "scroll:#enquire" }] }; } },
 
     { id: "trainers", keys: ["trainer^2", "trainers^2", "personal training^3", "personal trainer^3", "pt^2", "coach^2", "coaching", "guidance", "instructor", "workout plan^2"],
-      reply: function () { return { text: ["Members describe the trainers as **helpful and approachable**, and you can ask them for guidance on form, routines and getting started.", "For **personal training** options and charges, please ask the gym directly. Those details aren't listed on the website."],
+      reply: function () { return { text: ["Yes! Muscle House offers **personal training**, with **helpful, certified trainers** giving professional guidance and personalised support on your form, routine and goals.", "For personal training options and charges, please ask the gym directly."],
         actions: [{ label: "Ask about personal training", href: waLink("Hi Muscle House! I'd like to know about personal training."), kind: "wa" }] }; } },
 
-    { id: "facilities", keys: ["equipment^2", "equipments^2", "machine^2", "machines^2", "facility^2", "facilities^2", "amenities^2", "weights", "dumbbell", "dumbbells", "barbell", "clean", "hygiene",
-        "parking^2", "shower^2", "locker^2", "changing room^2", "washroom^2", "toilet", "ac^2", "air conditioned^2", "steam^2", "sauna^2", "zumba^2", "yoga^2", "crossfit^2", "aerobics^2", "class^2", "classes^2",
-        "diet^2", "nutrition^2", "supplement^2", "supplements^2", "women^2", "ladies^2", "female^2", "ladies timing^3", "ladies timings^3", "women timing^3", "women timings^3", "diet plan^3", "couple^2", "student^2", "discount^2", "offer^2", "offers^2", "refund^2", "freeze^2", "wifi^2", "towel^2", "cardio^2", "treadmill^2", "cycle", "kids^2", "age^2"],
+    { id: "facilities", keys: ["equipment^2", "equipments^2", "machine^2", "machines^2", "facility^2", "facilities^2", "amenities^2", "service^2", "services^2", "offer^2", "offers^2", "weights", "dumbbell", "dumbbells", "barbell", "clean", "hygiene", "hygienic",
+        "parking^2", "shower^2", "showers^2", "locker^2", "lockers^2", "changing room^2", "washroom^2", "toilet", "ac^2", "air conditioned^2", "air conditioning^2", "steam^2", "sauna^2", "zumba^2", "yoga^2", "crossfit^2", "aerobics^2", "class^2", "classes^2", "group^2",
+        "meal^2", "meals^2", "food^2", "post workout^3", "protein^2", "diet^2", "nutrition^2", "supplement^2", "supplements^2", "women^2", "ladies^2", "female^2", "ladies timing^3", "ladies timings^3", "women timing^3", "women timings^3", "diet plan^3", "couple^2", "student^2", "discount^2", "refund^2", "freeze^2", "wifi^2", "towel^2", "cardio^2", "treadmill^2", "cycle", "kids^2", "age^2", "special^2"],
       reply: function (text) {
         var unknown = unverifiedTerms(text);
-        var base = "Google reviews highlight **high-quality equipment**, a **clean, well-maintained space** and a **motivating atmosphere**.";
-        if (!unknown.length) return { text: [base, "For a full list of equipment and facilities, it's best to visit or ask the gym."],
-          actions: [{ label: "Book a visit", action: "scroll:#enquire", kind: "primary" }, { label: "Ask on WhatsApp", href: waLink("Hi Muscle House! Could you tell me about your equipment and facilities?"), kind: "wa" }] };
+        var list = ["**Training**: strength training, cardio workouts, personal training, yoga, Zumba and group fitness classes.",
+          "**High-quality, modern equipment** and **helpful, certified trainers**.",
+          "**Air-conditioned**, well-maintained and hygienic space with a motivating atmosphere.",
+          "**Showers & lockers**, plus **post-workout meals** to support your recovery."];
+        if (!unknown.length) return { text: ["Here's what Muscle House offers:"], list: list,
+          actions: [{ label: "Book a visit", action: "scroll:#enquire", kind: "primary" }, { label: "See training", action: "scroll:#training" }] };
         var topic = unknown.join(", ");
-        return { text: ["I don't have confirmed details about **" + topic + "**, and I'd rather not guess. The gym can answer that quickly.", base],
+        return { text: ["I don't have confirmed details about **" + topic + "**, and I'd rather not guess. The gym can answer that quickly.", "What I can confirm:"], list: list,
           actions: [{ label: "Ask on WhatsApp", href: waLink("Hi Muscle House! I'd like to know about " + topic + "."), kind: "wa" }, { label: "Call the gym", href: GYM.phoneTel, kind: "call" }] };
       } },
 
