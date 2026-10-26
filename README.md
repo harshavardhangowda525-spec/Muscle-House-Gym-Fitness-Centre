@@ -123,22 +123,22 @@ The form validates the name, a 10-digit Indian mobile number, the fitness goal a
 
 ## Photography
 
-The images in `assets/img/` are **AI-generated representative images** of strength-training environments, made with Floot. They are **not** photographs of the Muscle House premises, and the page says so in the gallery and the footer.
+The gallery has **three real photos of Muscle House** (`real-cardio.webp`, `real-dumbbells.webp`, `real-floor.webp`), lightly colour-graded (contrast, warmth, sharpening, soft vignette). They carry an "Inside Muscle House" badge. The other images in `assets/img/` are **AI-generated representative images** made with Floot, and the gallery note and footer say so.
 
-To use real photos of the gym, replace the files and keep the same names:
+To swap in more real photos, replace files and keep the same names:
 
 | File | Used in | Shape |
 |---|---|---|
 | `hero.webp` | Hero background | Landscape 16:9 |
 | `intro.webp` | "More than a workout" | Portrait 4:5 |
 | `strength.webp`, `cardio.webp`, `trainer.webp`, `yoga.webp`, `group.webp` | Training panels 01–05 | Portrait |
-| `deadlift.webp` | Gallery (wide) | Landscape |
-| `cable.webp`, `chalk.webp` | Gallery (tall) | Portrait |
-| `bench.webp`, `rope.webp` | Gallery | Square or landscape |
+| `real-cardio.webp` (real) | Gallery (wide) | Landscape |
+| `real-dumbbells.webp` (real), `cable.webp` | Gallery (tall) | Portrait |
+| `real-floor.webp` (real), `deadlift.webp` | Gallery | Landscape |
 | `final.webp` | Final CTA background | Landscape 16:9 |
 | `og.jpg` | Social share preview | 1200×630 |
 
-Aim for about 1600px on the long edge, WebP at roughly 70–80% quality. If you swap in genuine gym photos, update the alt text in `index.html` and remove the "representative imagery" notes.
+Aim for about 1600px on the long edge, WebP at roughly 70–80% quality. For a real photo, add the `gallery__item--real` class and the badge, as in the existing ones.
 
 ## Content accuracy
 
