@@ -200,6 +200,21 @@
     status.focus();
   }
 
+  // Keep the typed details across the login step (Google sign-in may reload the page).
+  var DRAFT = "mh-enquiry-draft", FIELDS = ["name", "phone", "goal", "time", "message"];
+  function saveDraft() {
+    var d = {}; FIELDS.forEach(function (n) { d[n] = form.elements[n].value; });
+    try { sessionStorage.setItem(DRAFT, JSON.stringify(d)); } catch (err) { /* ignore */ }
+  }
+  function clearDraft() { try { sessionStorage.removeItem(DRAFT); } catch (err) { /* ignore */ } }
+  (function restoreDraft() {
+    var d = null;
+    try { d = JSON.parse(sessionStorage.getItem(DRAFT) || "null"); } catch (err) { /* ignore */ }
+    if (!d) return;
+    FIELDS.forEach(function (n) { if (d[n] && !form.elements[n].value) form.elements[n].value = d[n]; });
+    msg.dispatchEvent(new Event("input"));
+  })();
+
   form.addEventListener("submit", function (e) {
     e.preventDefault();
     var firstInvalid = null;
@@ -212,6 +227,22 @@
       firstInvalid.focus();
       return;
     }
+
+    // Enquiries and visit bookings need a (free) account first, when accounts are set up.
+    var auth = window.MH && window.MH.auth;
+    if (auth && !auth.user()) {
+      saveDraft();
+      auth.require({
+        reason: "Log in or create a free account to send your enquiry or book a visit.",
+        then: function () {
+          if (!form.elements.name.value.trim() && auth.name()) form.elements.name.value = auth.name();
+          showStatus("success", "<strong>You're logged in.</strong>Press <em>Start your journey</em> again to open WhatsApp with your enquiry.");
+          form.querySelector('[type="submit"]').focus();
+        }
+      });
+      return;
+    }
+    var user = auth && auth.user();
 
     var data = {
       name: form.elements.name.value.trim(),
@@ -227,9 +258,11 @@
       "Phone: +91 " + data.phone + "\n" +
       "Fitness goal: " + data.goal + "\n" +
       "Preferred contact time: " + data.time +
-      (data.message ? "\nMessage: " + data.message : "");
+      (data.message ? "\nMessage: " + data.message : "") +
+      (user && user.email ? "\nAccount email: " + user.email : "");
 
     var url = "https://wa.me/" + whatsappNumber() + "?text=" + encodeURIComponent(text);
+    clearDraft();
     var win = window.open(url, "_blank");
     if (win) { try { win.opener = null; } catch (err) { /* ignore */ } }
 
