@@ -129,9 +129,20 @@
     });
   });
 
-  /* ---------- "Enquire now" links focus the first form field ---------- */
+  /* ---------- "Enquire now" links: phones jump straight to the form, desktops focus its first field ---------- */
+  var stacked = window.matchMedia("(max-width: 979px)"); // .enquire__grid is one column below 980px
   document.querySelectorAll('a[href="#enquire"]').forEach(function (a) {
-    a.addEventListener("click", function () {
+    a.addEventListener("click", function (e) {
+      var formEl = document.getElementById("enquiry-form");
+      if (stacked.matches && formEl) {
+        e.preventDefault();
+        // Let an open mobile menu close first so the scroll position is right
+        window.setTimeout(function () {
+          formEl.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+          history.replaceState(null, "", "#enquire");
+        }, 50);
+        return;
+      }
       window.setTimeout(function () {
         var f = document.getElementById("f-name");
         if (f) f.focus({ preventScroll: true });

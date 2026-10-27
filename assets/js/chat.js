@@ -435,6 +435,8 @@
     var small = window.matchMedia("(max-width: 640px)").matches;
     if (a.action.indexOf("scroll:") === 0) {
       var target = document.querySelector(a.action.slice(7));
+      // On phones the enquiry intro stacks above the form, so go straight to the form
+      if (a.action === "scroll:#enquire" && window.matchMedia("(max-width: 979px)").matches) target = document.getElementById("enquiry-form") || target;
       if (small) closeChat(false);
       if (target) target.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
       return;
