@@ -23,5 +23,5 @@ window.MH_CONFIG = {
   paymentUrl: "",
   // Live Google reviews (Trustindex, free plan): paste the widget code Trustindex gives you,
   // or just the ID after "loader.js?" in it. Leave empty to show the saved reviews.
-  trustindexWidget: ""
+  trustindexWidget: "2b8c8f384b5d778ca26656356d8"
 };

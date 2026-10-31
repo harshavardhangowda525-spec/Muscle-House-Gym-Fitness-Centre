@@ -16,8 +16,10 @@
 
   var saved = [section.querySelector(".score"), section.querySelector(".quotes"), section.querySelector("[data-reviews-note]")];
 
+  // Trustindex first inserts an empty placeholder; wait for the real widget (.ti-widget)
+  function ready() { return !!slot.querySelector(".ti-widget"); }
   function rendered() {
-    if (!slot.querySelector("div, iframe")) return false;
+    if (!ready()) return false;
     saved.forEach(function (el) { if (el) el.hidden = true; });
     return true;
   }
@@ -25,11 +27,23 @@
   slot.hidden = false;
   var observer = new MutationObserver(function () { if (rendered()) observer.disconnect(); });
   observer.observe(slot, { childList: true, subtree: true });
-  // Give up after 10 s and keep the saved reviews
-  window.setTimeout(function () {
-    observer.disconnect();
-    if (!slot.querySelector("div, iframe")) slot.hidden = true;
-  }, 10000);
+  // Trustindex loads the widget when it scrolls into view; if it hasn't appeared
+  // 10 s after that, give up and keep the saved reviews.
+  function giveUpLater() {
+    window.setTimeout(function () {
+      if (ready()) return;
+      observer.disconnect();
+      slot.hidden = true;
+    }, 10000);
+  }
+  if ("IntersectionObserver" in window) {
+    var seen = new IntersectionObserver(function (entries) {
+      if (entries[0].isIntersecting) { seen.disconnect(); giveUpLater(); }
+    });
+    seen.observe(section);
+  } else {
+    giveUpLater();
+  }
 
   var s = document.createElement("script");
   s.defer = true; s.async = true;
