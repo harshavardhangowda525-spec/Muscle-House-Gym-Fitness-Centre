@@ -20,5 +20,8 @@ window.MH_CONFIG = {
   googleClientId: "158488207213-137csauhgdb54g82pcs280vsfqbar6ko.apps.googleusercontent.com",
   // Future online payment: paste a payment-gateway link (https://…, e.g. a Razorpay/PayU payment
   // page) and a "Pay online" button appears in the Membership section. Leave empty to hide it.
-  paymentUrl: ""
+  paymentUrl: "",
+  // Live Google reviews: set to true once the "google-reviews" Edge Function is deployed with
+  // its Google API key and Place ID (see README → Google reviews). Until then the saved reviews show.
+  googleReviews: false
 };

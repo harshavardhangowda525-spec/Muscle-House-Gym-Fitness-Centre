@@ -434,12 +434,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .training { background: radial-gradient(70% 50% at 80% 0%, rgba(217,44,30,.05), transparent 60%), var(--obsidian); }
 .panels { display: grid; gap: 1.25rem; }
 @media (min-width: 640px) { .panels { grid-template-columns: repeat(2, 1fr); } .panels > :last-child:nth-child(odd) { grid-column: 1 / -1; } }
-@media (min-width: 1000px) {
-  .panels { grid-template-columns: repeat(6, 1fr); }
-  .panels > .panel { grid-column: span 2; }
-  .panels > .panel:nth-child(n+4) { grid-column: span 3; }
-  .panels > .panel:nth-child(n+4) .panel__media { aspect-ratio: 16 / 10; }
-}
+@media (min-width: 1000px) { .panels { grid-template-columns: repeat(3, 1fr); } }
 @media (min-width: 640px) and (max-width: 999px) { .panels > :last-child:nth-child(odd) .panel__media { aspect-ratio: 16 / 9; } }
 .panel {
   position: relative; display: flex; flex-direction: column;
@@ -500,6 +495,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 @media (min-width: 640px) { .features { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 1080px) { .features { grid-template-columns: repeat(4, 1fr); } }
 @media (min-width: 640px) { .features > :last-child:nth-child(odd) { grid-column: span 2; } }
+@media (min-width: 1080px) { .features > :last-child:nth-child(4n+1) { grid-column: 1 / -1; } }
 .feature {
   position: relative; padding: 2.4rem 1.8rem 2.6rem; background: linear-gradient(180deg, #121212, #0b0b0b);
   overflow: hidden; transition: background .5s var(--ease);
@@ -689,6 +685,9 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .quote::before { content: "“"; position: absolute; right: 1.4rem; top: .2rem; font-family: var(--font-display); font-size: 6rem; line-height: 1; color: rgba(245,243,239,.06); }
 .quote__stars { color: var(--orange); letter-spacing: .2em; font-size: .95rem; }
 .quote blockquote p { font-size: clamp(1.15rem, 1.6vw, 1.35rem); font-weight: 600; line-height: 1.45; }
+.quote--live blockquote p { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.quote--live figcaption a { color: var(--offwhite); text-decoration: none; }
+.quote--live figcaption a:hover { color: var(--red-text); }
 .quote figcaption { margin-top: auto; font-size: .72rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--steel); display: flex; align-items: center; gap: .6rem; }
 .quote figcaption::before { content: "G"; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--line-strong); font-size: .7rem; letter-spacing: 0; color: var(--offwhite); }
 .reviews__foot { margin-top: 2rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; color: var(--steel); font-size: .85rem; }

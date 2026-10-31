@@ -100,6 +100,22 @@ Until `config.js` is filled in, the website keeps working exactly as before, wit
 - Member names and other text are HTML-escaped in the dashboard, and the CSV export guards against spreadsheet formula injection.
 - `admin.html` is marked `noindex`, but it relies on the login and database rules for protection, not on staying hidden.
 
+## Google reviews (live)
+
+The Reviews section can load the gym's **live Google rating, review count and reviews** from Google's official **Places API**. The API key never reaches the browser: a small Supabase Edge Function (`supabase/functions/google-reviews/index.ts`) calls Google and keeps the result for 6 hours. Until it's switched on, or if Google can't be reached, the page shows the reviews already in `index.html`.
+
+Google returns at most **5 reviews**, chosen by Google ("most relevant"). The page shows the first 3 with the reviewer's name, a link to their Google profile, and each review's own star rating.
+
+One-time setup:
+1. **Google Cloud Console** (the same project as the Google login) → APIs & Services → Library → enable **Places API (New)**. A billing account must be attached; this low traffic normally stays within Google's free monthly usage.
+2. APIs & Services → Credentials → **Create credentials → API key**. Restrict it to **Places API (New)**.
+3. Find the gym's **Place ID** with Google's *Place ID Finder* (search "Muscle House Gym & Fitness Centre HSR Layout").
+4. **Supabase → Edge Functions → Secrets**: add `GOOGLE_PLACES_API_KEY` (the key) and `GOOGLE_PLACE_ID` (the Place ID).
+5. **Supabase → Edge Functions → Deploy a new function**: name it `google-reviews` and paste the contents of `supabase/functions/google-reviews/index.ts`. Or use the CLI: `supabase functions deploy google-reviews`.
+6. In `assets/js/config.js`, set `googleReviews: true`, bump the `?v=` on `config.js` in both HTML files, and publish.
+
+To check it's working, open `https://<project>.supabase.co/functions/v1/google-reviews` with the anon key, or just reload the site: the rating and cards update.
+
 ## Help assistant ("Ask Muscle House")
 
 The chat button in the bottom-right corner opens an **automated FAQ assistant**. It runs entirely in the visitor's browser: **no AI service, no API key, no cost**, and nothing typed into it is sent anywhere.
