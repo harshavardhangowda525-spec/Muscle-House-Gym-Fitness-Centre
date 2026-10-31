@@ -21,7 +21,7 @@ window.MH_CONFIG = {
   // Future online payment: paste a payment-gateway link (https://…, e.g. a Razorpay/PayU payment
   // page) and a "Pay online" button appears in the Membership section. Leave empty to hide it.
   paymentUrl: "",
-  // Live Google reviews: set to true once the "google-reviews" Edge Function is deployed with
-  // its Google API key and Place ID (see README → Google reviews). Until then the saved reviews show.
-  googleReviews: false
+  // Live Google reviews (Trustindex, free plan): paste the widget code Trustindex gives you,
+  // or just the ID after "loader.js?" in it. Leave empty to show the saved reviews.
+  trustindexWidget: ""
 };

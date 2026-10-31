@@ -685,11 +685,10 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .quote::before { content: "“"; position: absolute; right: 1.4rem; top: .2rem; font-family: var(--font-display); font-size: 6rem; line-height: 1; color: rgba(245,243,239,.06); }
 .quote__stars { color: var(--orange); letter-spacing: .2em; font-size: .95rem; }
 .quote blockquote p { font-size: clamp(1.15rem, 1.6vw, 1.35rem); font-weight: 600; line-height: 1.45; }
-.quote--live blockquote p { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-.quote--live figcaption a { color: var(--offwhite); text-decoration: none; }
-.quote--live figcaption a:hover { color: var(--red-text); }
 .quote figcaption { margin-top: auto; font-size: .72rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--steel); display: flex; align-items: center; gap: .6rem; }
 .quote figcaption::before { content: "G"; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--line-strong); font-size: .7rem; letter-spacing: 0; color: var(--offwhite); }
+.reviews__widget { min-height: 120px; }
+.reviews [hidden] { display: none !important; }
 .reviews__foot { margin-top: 2rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; color: var(--steel); font-size: .85rem; }
 
 /* ---------- 7. Visit ---------- */
