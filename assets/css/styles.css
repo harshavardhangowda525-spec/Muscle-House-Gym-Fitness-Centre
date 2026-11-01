@@ -103,6 +103,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   text-transform: uppercase;
   line-height: .92;
   letter-spacing: .005em;
+  overflow-wrap: break-word; /* only kicks in if a word can't fit, e.g. fallback font on a 320px phone */
 }
 .display-2xl { font-size: clamp(3.4rem, 11vw, 9.5rem); }
 .display-xl { font-size: clamp(2.8rem, 7.4vw, 6.4rem); }
@@ -663,10 +664,11 @@ button, input, select, textarea { font: inherit; color: inherit; }
 
 /* ---------- 6. Reviews ---------- */
 .reviews__head { display: grid; gap: 2rem; align-items: end; margin-bottom: clamp(2.5rem, 6vw, 4rem); }
+.reviews__head > * { min-width: 0; }
 .reviews__head .display-xl { margin-top: 1.25rem; }
 @media (min-width: 900px) { .reviews__head { grid-template-columns: 1.4fr auto; } }
 .score {
-  display: flex; align-items: center; gap: 1.25rem; padding: 1.25rem 1.6rem;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 1.25rem; padding: 1.25rem 1.6rem;
   border: 1px solid var(--line-strong); border-radius: var(--radius); background: rgba(9,9,9,.5);
 }
 .score__num { font-family: var(--font-display); font-size: 4rem; line-height: 1; color: var(--orange); }

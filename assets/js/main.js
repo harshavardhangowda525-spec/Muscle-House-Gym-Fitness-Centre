@@ -129,6 +129,16 @@
     });
   });
 
+  /* Scroll an element to just below the fixed nav. Uses layout position (offsetTop), so an
+     element mid reveal-animation (translateY) still lands in the right place. */
+  function scrollToEl(el) {
+    var y = 0, n = el;
+    while (n) { y += n.offsetTop; n = n.offsetParent; }
+    var pad = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+    window.scrollTo({ top: Math.max(0, y - pad), behavior: reduceMotion ? "auto" : "smooth" });
+  }
+  window.MHScrollTo = scrollToEl;
+
   /* ---------- "Enquire now" links: phones jump straight to the form, desktops focus its first field ---------- */
   var stacked = window.matchMedia("(max-width: 979px)"); // .enquire__grid is one column below 980px
   document.querySelectorAll('a[href="#enquire"]').forEach(function (a) {
@@ -138,7 +148,7 @@
         e.preventDefault();
         // Let an open mobile menu close first so the scroll position is right
         window.setTimeout(function () {
-          formEl.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+          scrollToEl(formEl);
           history.replaceState(null, "", "#enquire");
         }, 50);
         return;

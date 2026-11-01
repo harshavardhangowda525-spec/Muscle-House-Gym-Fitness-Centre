@@ -438,7 +438,8 @@
       // On phones the enquiry intro stacks above the form, so go straight to the form
       if (a.action === "scroll:#enquire" && window.matchMedia("(max-width: 979px)").matches) target = document.getElementById("enquiry-form") || target;
       if (small) closeChat(false);
-      if (target) target.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+      if (target && window.MHScrollTo) window.MHScrollTo(target);
+      else if (target) target.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
       return;
     }
     if (a.action === "login" || a.action === "account") {
