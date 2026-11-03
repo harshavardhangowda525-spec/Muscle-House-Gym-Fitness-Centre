@@ -155,7 +155,7 @@ Aim for about 1600px on the long edge, WebP at roughly 70–80% quality. To add 
 
 ## Content accuracy
 
-Only verified facts are used: name, address, phone, the 4.4/5 Google rating from 105 reviews, the three supplied review quotes, and the content supplied by the gym owner: the About text and mission, the five training types (plus Zumba), the "What makes Muscle House special" list (certified trainers, air conditioning, showers & lockers, post-workout meals and more), the membership wording, and the gym timings (Mon–Sat 6 AM–10 PM, Sun 7 AM–12 PM).
+Only verified facts are used: name, address, phone, the Google rating and review count (4.4/5 from 107 reviews at the time of writing; the page updates them live from Trustindex), the three supplied review quotes, and the content supplied by the gym owner: the About text and mission, the five training types (plus Zumba), the "What makes Muscle House special" list (certified trainers, air conditioning, showers & lockers, post-workout meals and more), the membership wording, and the gym timings (Mon–Sat 6 AM–10 PM, Sun 7 AM–12 PM).
 
 The structured data includes the opening hours but no rating markup.
 

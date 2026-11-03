@@ -19,7 +19,7 @@
     hoursWeek: "6:00 AM – 10:00 PM",
     hoursSun: "7:00 AM – 12:00 PM",
     rating: "4.4/5",
-    reviews: "105",
+    reviews: "107",
     directions: "https://www.google.com/maps/dir/?api=1&destination=Muscle%20House%20Gym%20%26%20Fitness%20Centre%2C%20754%2C%2019th%20Main%2C%2022nd%20Cross%20Road%2C%20Sector%202%2C%20HSR%20Layout%2C%20Bengaluru%2C%20Karnataka%20560102",
     reviewsUrl: "https://www.google.com/maps/search/?api=1&query=Muscle%20House%20Gym%20%26%20Fitness%20Centre%2C%20754%2C%2019th%20Main%2C%2022nd%20Cross%20Road%2C%20Sector%202%2C%20HSR%20Layout%2C%20Bengaluru%20560102"
   };
@@ -243,7 +243,7 @@
       } },
 
     { id: "reviews", keys: ["review^2", "reviews^2", "rating^2", "ratings^2", "google rating^3", "star", "stars", "feedback", "testimonial", "is it good", "good gym", "best gym", "worth"],
-      reply: function () { return { text: ["⭐ Muscle House has a **" + GYM.rating + " Google rating** from **" + GYM.reviews + " reviews**.", "Members mention top-quality equipment, a clean, well-maintained setup, a motivating environment and helpful trainers."],
+      reply: function () { var live = window.MHReviewStats; return { text: ["⭐ Muscle House has a **" + (live ? live.rating + "/5" : GYM.rating) + " Google rating** from **" + (live ? live.count : GYM.reviews) + " reviews**.", "Members mention top-quality equipment, a clean, well-maintained setup, a motivating environment and helpful trainers."],
         actions: [{ label: "Read the reviews", href: GYM.reviewsUrl }, { label: "See highlights", action: "scroll:#reviews" }] }; } },
 
     { id: "trial", keys: ["trial^3", "free trial^3", "before joining^2", "try the gym^2", "try it out^2", "demo^2", "visit^2", "guest pass^3", "day pass^3", "try^2", "one day^2", "walk in", "see the gym^2", "tour^2"],
