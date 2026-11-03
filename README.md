@@ -128,7 +128,7 @@ The chat button in the bottom-right corner opens an **automated FAQ assistant**.
 
 ## Enquiry form: how it works
 
-The form validates the name, a 10-digit Indian mobile number, the fitness goal and the preferred contact time in the browser. When the visitor submits, it **opens WhatsApp with the enquiry pre-filled** to `+91 63633 42090`.
+The form has just four fields: **Name**, **Phone number** (10-digit Indian mobile), **Email ID** and **Purpose**, a drop-down where **Others** reveals a box to type the purpose. The browser validates them, and logged-in visitors get their name and email filled in. When the visitor submits, it **opens WhatsApp with the enquiry pre-filled** to `+91 63633 42090`.
 
 - Nothing is sent until the visitor presses **send in WhatsApp**, and the page says so clearly. It never shows a fake "message sent" confirmation.
 - The website stores and transmits no personal data itself.

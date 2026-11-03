@@ -738,6 +738,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .field-row { display: grid; gap: 1.25rem; }
 @media (min-width: 640px) { .field-row { grid-template-columns: 1fr 1fr; } }
 .field { display: grid; gap: .45rem; }
+.field[hidden] { display: none; }
 .field label { font-size: .72rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: #D9D7D2; }
 .field label span[aria-hidden] { color: var(--red-text); }
 .field .optional { color: var(--steel); text-transform: none; letter-spacing: .02em; font-weight: 500; }

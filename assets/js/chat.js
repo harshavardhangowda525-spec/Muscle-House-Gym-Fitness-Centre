@@ -251,11 +251,11 @@
         actions: [{ label: "Book a visit", action: "scroll:#enquire", kind: "primary" }, { label: "Ask about a trial", href: waLink("Hi Muscle House! Do you offer a trial or day pass?"), kind: "wa" }] }; } },
 
     { id: "enquiry", keys: ["enquiry^2", "enquire^2", "inquiry^2", "inquire", "form^2", "callback^2", "call back^2", "contact form", "book a visit^3", "book visit^2", "appointment"],
-      reply: function () { return { text: ["The **enquiry form** asks for your name, phone, fitness goal and a good time to call. You'll need to **log in** (free) first. When you submit it, WhatsApp opens with your enquiry ready. Just press **send** to deliver it to the gym.", "The website itself doesn't store your enquiry."],
+      reply: function () { return { text: ["The **enquiry form** asks for your name, phone number, email ID and purpose (choose **Others** to type your own). You'll need to **log in** (free) first. When you submit it, WhatsApp opens with your enquiry ready. Just press **send** to deliver it to the gym.", "The website itself doesn't store your enquiry."],
         actions: [{ label: "Open the enquiry form", action: "scroll:#enquire", kind: "primary" }] }; } },
 
     { id: "goals", keys: ["weight loss^3", "lose weight^3", "fat loss^3", "fat^2", "slim", "muscle gain^3", "gain muscle^3", "build muscle^3", "bulk", "strength^2", "beginner^2", "first time^2", "new to gym^3", "never been", "fitness goal^2", "tone", "abs"],
-      reply: function () { return { text: ["Great goal! 💪 Whatever you're working towards, the trainers can guide you on where to start and how to train safely.", "Tell the gym your goal in the **enquiry form**, or mention it when you join."],
+      reply: function () { return { text: ["Great goal! 💪 Whatever you're working towards, the trainers can guide you on where to start and how to train safely.", "Pick your purpose in the **enquiry form** (for example Fat loss programme or Personal training), or mention your goal when you join."],
         actions: [{ label: "Share my goal", action: "scroll:#enquire", kind: "primary" }, { label: "Training at Muscle House", action: "scroll:#training" }] }; } },
 
     { id: "privacy", keys: ["privacy^2", "data^2", "safe^2", "secure^2", "security", "personal information", "information safe", "delete account^3", "delete my account^3", "remove account^2", "spam"],

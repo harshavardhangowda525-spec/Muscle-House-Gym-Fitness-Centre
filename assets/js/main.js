@@ -117,15 +117,13 @@
     } else { loadMap(); }
   }
 
-  /* ---------- Plan buttons prefill the enquiry message ---------- */
+  /* ---------- Plan buttons preselect the enquiry purpose ---------- */
   document.querySelectorAll("[data-plan]").forEach(function (a) {
     a.addEventListener("click", function () {
-      var box = document.getElementById("f-msg");
-      if (!box) return;
-      var line = "Interested in: " + a.getAttribute("data-plan");
-      var rest = box.value.replace(/^Interested in: .*(\n|$)/, "");
-      box.value = line + (rest ? "\n" + rest : "");
-      box.dispatchEvent(new Event("input"));
+      var sel = document.getElementById("f-purpose");
+      if (!sel) return;
+      sel.value = /personal/i.test(a.getAttribute("data-plan")) ? "Personal training" : "Membership & pricing";
+      sel.dispatchEvent(new Event("change"));
     });
   });
 
@@ -164,10 +162,20 @@
   var form = document.querySelector("[data-form]");
   if (!form) return;
   var status = form.querySelector("[data-status]");
-  var msg = form.querySelector("#f-msg");
-  var counter = form.querySelector("[data-count]");
+  var purpose = form.elements.purpose, otherField = form.querySelector("[data-other]");
+  var EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-  msg.addEventListener("input", function () { counter.textContent = String(msg.value.length); });
+  // "Others" reveals a box to type the purpose
+  function syncOther() {
+    var on = purpose.value === "Others";
+    otherField.hidden = !on;
+    form.elements.other.required = on;
+    if (!on) { form.elements.other.value = ""; otherField.classList.remove("has-error"); otherField.querySelector(".field__error").textContent = ""; }
+  }
+  purpose.addEventListener("change", function () {
+    syncOther();
+    if (purpose.value === "Others") form.elements.other.focus();
+  });
 
   function normalisePhone(raw) {
     var digits = raw.replace(/[\s\-().]/g, "");
@@ -188,8 +196,20 @@
       if (!normalisePhone(v)) return "Enter a valid 10-digit Indian mobile number, e.g. 98765 43210.";
       return "";
     },
-    goal: function (v) { return v ? "" : "Please choose a fitness goal."; },
-    time: function (v) { return v ? "" : "Please choose a preferred contact time."; }
+    email: function (v) {
+      v = v.trim();
+      if (!v) return "Please enter your email ID.";
+      if (!EMAIL.test(v)) return "Enter a valid email ID, e.g. you@example.com.";
+      return "";
+    },
+    purpose: function (v) { return v ? "" : "Please choose a purpose."; },
+    other: function (v) {
+      if (purpose.value !== "Others") return "";
+      v = v.trim();
+      if (!v) return "Please enter your purpose.";
+      if (/[<>{}]/.test(v)) return "Please use plain text.";
+      return "";
+    }
   };
 
   function validateField(input) {
@@ -222,7 +242,7 @@
   }
 
   // Keep the typed details across the login step (Google sign-in may reload the page).
-  var DRAFT = "mh-enquiry-draft", FIELDS = ["name", "phone", "goal", "time", "message"];
+  var DRAFT = "mh-enquiry-draft", FIELDS = ["name", "phone", "email", "purpose", "other"];
   function saveDraft() {
     var d = {}; FIELDS.forEach(function (n) { d[n] = form.elements[n].value; });
     try { sessionStorage.setItem(DRAFT, JSON.stringify(d)); } catch (err) { /* ignore */ }
@@ -233,8 +253,19 @@
     try { d = JSON.parse(sessionStorage.getItem(DRAFT) || "null"); } catch (err) { /* ignore */ }
     if (!d) return;
     FIELDS.forEach(function (n) { if (d[n] && !form.elements[n].value) form.elements[n].value = d[n]; });
-    msg.dispatchEvent(new Event("input"));
+    syncOther();
   })();
+
+  // Logged-in visitors: fill in their name and email from the account.
+  // auth.js loads after this file, so wait until all scripts have run.
+  document.addEventListener("DOMContentLoaded", function () {
+    if (!(window.MH && window.MH.auth)) return;
+    window.MH.auth.onChange(function (u) {
+      if (!u) return;
+      if (!form.elements.email.value && u.email) form.elements.email.value = u.email;
+      if (!form.elements.name.value && window.MH.auth.name()) form.elements.name.value = window.MH.auth.name();
+    });
+  });
 
   form.addEventListener("submit", function (e) {
     e.preventDefault();
@@ -257,7 +288,7 @@
         reason: "Log in or create a free account to send your enquiry or book a visit.",
         then: function () {
           if (!form.elements.name.value.trim() && auth.name()) form.elements.name.value = auth.name();
-          showStatus("success", "<strong>You're logged in.</strong>Press <em>Start your journey</em> again to open WhatsApp with your enquiry.");
+          showStatus("success", "<strong>You're logged in.</strong>Press <em>Submit</em> again to open WhatsApp with your enquiry.");
           form.querySelector('[type="submit"]').focus();
         }
       });
@@ -268,19 +299,17 @@
     var data = {
       name: form.elements.name.value.trim(),
       phone: normalisePhone(form.elements.phone.value),
-      goal: form.elements.goal.value,
-      time: form.elements.time.value,
-      message: msg.value.trim()
+      email: form.elements.email.value.trim(),
+      purpose: purpose.value === "Others" ? "Others: " + form.elements.other.value.trim() : purpose.value
     };
 
     var text =
       "Hi Muscle House! I'd like to enquire about the gym.\n\n" +
       "Name: " + data.name + "\n" +
       "Phone: +91 " + data.phone + "\n" +
-      "Fitness goal: " + data.goal + "\n" +
-      "Preferred contact time: " + data.time +
-      (data.message ? "\nMessage: " + data.message : "") +
-      (user && user.email ? "\nAccount email: " + user.email : "");
+      "Email: " + data.email + "\n" +
+      "Purpose: " + data.purpose +
+      (user && user.email && user.email.toLowerCase() !== data.email.toLowerCase() ? "\nAccount email: " + user.email : "");
 
     var url = "https://wa.me/" + whatsappNumber() + "?text=" + encodeURIComponent(text);
     clearDraft();
