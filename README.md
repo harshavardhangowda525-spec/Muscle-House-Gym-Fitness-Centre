@@ -115,6 +115,14 @@ When the widget appears, the saved rating and quote cards hide automatically, an
 
 **Free plan limits** (check trustindex.io for current terms): the widget shows a small Trustindex label, review updates are less frequent than on paid plans, and the number of reviews shown may be limited.
 
+## Moving to a new domain
+
+When the site moves from GitHub Pages to the gym's own domain, update these:
+- `index.html`: the `og:url`, `og:image`, `twitter:image` and structured-data `image` / `url` values (full `https://` addresses, which WhatsApp and Facebook need for link previews).
+- **Supabase → Authentication → URL Configuration:** Site URL and Redirect URLs.
+- **Google Cloud → Clients → Authorized JavaScript origins:** add the new domain.
+- **Trustindex:** the website address in the widget settings (the widget code itself stays the same).
+
 ## Help assistant ("Ask Muscle House")
 
 The chat button in the bottom-right corner opens an **automated FAQ assistant**. It runs entirely in the visitor's browser: **no AI service, no API key, no cost**, and nothing typed into it is sent anywhere.
@@ -163,6 +171,6 @@ The structured data includes the opening hours but no rating markup.
 
 There's no payment gateway yet: membership is by phone or WhatsApp. When the gym is ready, create a payment page with a provider such as Razorpay or PayU and paste its `https://` link as `paymentUrl` in `assets/js/config.js`. A **Pay online** button then appears in the Membership section. Leave it empty to keep the button hidden.
 
-**Membership prices are placeholders** (₹2,000 / ₹5,500 / ₹9,500 / ₹16,000), and the page labels them "sample prices … to be confirmed". Once Supabase is connected, set the real prices in **admin → Plans & prices** and untick *Show the "sample prices" notice* under **Payment details**. Without Supabase, edit the numbers in the `MEMBERSHIP` block of `index.html` and delete the `.plans__disclaimer` note.
+**Membership prices are placeholders** (₹2,000 / ₹5,500 / ₹9,500 / ₹16,000), and the page labels them "sample prices … to be confirmed". Once Supabase is connected, set the real prices in **admin → Plans & prices** and untick *Show the "sample prices" notice* in the same **Plans & prices** tab. (The plan cards are hidden for now; see "Membership by phone" to show them again.) Without Supabase, edit the numbers in the `MEMBERSHIP` block of `index.html` and delete the `.plans__disclaimer` note.
 
 The "Read all reviews" and Maps links use a Google Maps **search** for the exact business name and address, because no verified listing URL was supplied. If you have the gym's Google Maps place link, use it for those `href`s instead.

@@ -200,7 +200,7 @@
       reply: function () {
         var u = currentUser();
         return { text: ["**My membership** (person icon → My membership) shows your plans once the gym has recorded them:"],
-          list: ["**Active**: shows your start and end dates.", "**Expired**: the plan has ended. To **renew**, just **Join on WhatsApp** again.", "Nothing showing yet? The gym adds it after confirming your payment. It appears when they use the **same email you log in with**."],
+          list: ["**Active**: shows your start and end dates.", "**Expired**: the plan has ended. To **renew**, " + (plansHidden() ? "call **" + GYM.phoneDisplay + "** or WhatsApp the gym." : "just **Join on WhatsApp** again."), "Nothing showing yet? The gym adds it after confirming your payment. It appears when they use the **same email you log in with**."],
           actions: [{ label: u ? "Open My membership" : "Log in to view", action: u ? "account" : "login", kind: "primary" }] };
       } },
 
@@ -264,7 +264,7 @@
 
     { id: "website", keys: ["website^2", "site^2", "how does this work^3", "how this works^3", "how it works^2", "what can you do^3", "features^2", "help^1.5", "guide", "menu", "sections", "use this", "who are you^2", "bot", "chatbot", "assistant"],
       reply: function () { return { text: ["Here's what you can do on this website:"],
-        list: [plansHidden() ? "**Membership**: call **" + GYM.phoneDisplay + "** for plans and pricing." : "**Membership**: see plans and prices, and **Join on WhatsApp**.", "**Log in** (person icon): create an account with email or Google, and check **My membership**.", "**Training, Gallery & Reviews**: get a feel for the gym.", "**Visit**: address, map, directions and tap-to-call.", "**Enquiry form**: send your details and goal on WhatsApp.", "And me! I'm an automated assistant: I answer common questions instantly and pass anything else to the gym."],
+        list: [plansHidden() ? "**Membership**: call **" + GYM.phoneDisplay + "** for plans and pricing." : "**Membership**: see plans and prices, and **Join on WhatsApp**.", "**Log in** (person icon): create an account with email or Google, and check **My membership**.", "**Training, Gallery & Reviews**: get a feel for the gym.", "**Visit**: address, map, directions and tap-to-call.", "**Enquiry form**: send your name, phone, email and purpose on WhatsApp.", "And me! I'm an automated assistant: I answer common questions instantly and pass anything else to the gym."],
         chips: CHIPS_START }; } },
 
     { id: "credit", keys: ["who made^3", "who built^3", "who designed^3", "developer^2", "designer^2", "website developer^3", "made this website^3", "built this website^3", "infinity^2", "web design^2", "website for my business^3", "your website"],
