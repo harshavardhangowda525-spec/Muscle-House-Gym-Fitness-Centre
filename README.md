@@ -115,6 +115,16 @@ When the widget appears, the saved rating and quote cards hide automatically, an
 
 **Free plan limits** (check trustindex.io for current terms): the widget shows a small Trustindex label, review updates are less frequent than on paid plans, and the number of reviews shown may be limited.
 
+## Recent changes
+
+- **4 Nov 2026:**
+  - **Home and Training:** the home section and the Training cards are centred, with larger text.
+  - **"What makes Muscle House special":** centred, with larger descriptions.
+  - **Enquiry form:** now Name, Phone, Purpose (with Others) and Preferred time slot. The slots are Morning 6–11 AM, Afternoon 11 AM–4 PM, Evening 4–8 PM and Night 8–10 PM.
+- **3 Nov 2026:**
+  - **Enquiry form:** no longer needs a login.
+  - **Google rating:** the rating and review count update automatically from Trustindex.
+
 ## Moving to a new domain
 
 When the site moves from GitHub Pages to the gym's own domain, update these:
