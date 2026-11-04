@@ -504,7 +504,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .feature:hover::after { opacity: 1; }
 .feature__icon { display: block; width: 48px; height: 48px; fill: none; stroke: var(--orange); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; margin: 0 auto 2rem; }
 .feature h3 { font-family: var(--font-display); font-weight: 400; font-size: 1.6rem; line-height: 1.05; text-transform: uppercase; margin-bottom: .8rem; }
-.feature p { color: var(--steel); font-size: 1.15rem; line-height: 1.6; }
+.feature p { color: var(--steel); font-size: clamp(1.25rem, 1.6vw, 1.35rem); line-height: 1.55; }
 
 /* ---------- Membership ---------- */
 .plans-wrap[hidden] { display: none; }
