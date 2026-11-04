@@ -424,11 +424,11 @@ button, input, select, textarea { font: inherit; color: inherit; }
 @media (max-width: 899px) { .float-label { right: 1rem; } }
 @keyframes bob { 50% { transform: translateY(-8px); } }
 .intro__copy .display-xl { margin-top: 1.25rem; }
-.intro__text { margin-top: 1.1rem; color: #CFCDC8; }
+.intro__text { margin-top: 1.1rem; color: #CFCDC8; font-size: clamp(1.05rem, 1.5vw, 1.25rem); } /* same size as the first (.lead) paragraph */
 .intro__mission { margin-top: 1.75rem; padding: 1.1rem 1.25rem; border-left: 3px solid var(--orange); background: rgba(234,129,7,.06); border-radius: 0 10px 10px 0; }
 .intro__mission-k { display: block; font-size: .7rem; font-weight: 800; letter-spacing: .22em; text-transform: uppercase; color: var(--orange); margin-bottom: .4rem; }
-.intro__mission p { color: var(--offwhite); font-weight: 600; }
-.intro__where { margin-top: 1.5rem; display: flex; gap: .75rem; align-items: flex-start; padding: 1rem 0; border-block: 1px solid var(--line); color: #D9D7D2; font-size: .95rem; }
+.intro__mission p { color: var(--offwhite); font-weight: 600; font-size: clamp(1.05rem, 1.5vw, 1.25rem); }
+.intro__where { margin-top: 1.5rem; display: flex; gap: .75rem; align-items: flex-start; padding: 1rem 0; border-block: 1px solid var(--line); color: #D9D7D2; font-size: clamp(1.05rem, 1.5vw, 1.25rem); }
 .intro__where svg { width: 22px; height: 22px; flex: none; fill: var(--red-text); margin-top: .1rem; }
 .intro__where a { color: var(--orange); font-weight: 700; white-space: nowrap; }
 .intro__tagline { margin-top: 1.5rem; font-family: var(--font-display); font-size: clamp(1.35rem, 2.6vw, 1.8rem); line-height: 1.1; text-transform: uppercase; color: var(--offwhite); }
@@ -460,7 +460,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .panel__body { position: relative; padding: 0 1.6rem 2rem; margin-top: -2.5rem; z-index: 1; text-align: center; }
 .panel__num { font-family: var(--font-display); font-size: 3.2rem; line-height: 1; color: transparent; -webkit-text-stroke: 1px var(--orange); }
 .panel__title { font-family: var(--font-display); font-weight: 400; font-size: 1.9rem; text-transform: uppercase; line-height: 1; margin: .6rem 0 .9rem; }
-.panel p { color: var(--steel); font-size: 1.05rem; line-height: 1.6; }
+.panel p { color: var(--steel); font-size: 1.17rem; line-height: 1.6; }
 
 /* ---------- 4. Gallery ---------- */
 /* Six real photos in an even grid: 2 columns × 3 rows on phones/tablets, 3 × 2 on desktop */
@@ -504,7 +504,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .feature:hover::after { opacity: 1; }
 .feature__icon { display: block; width: 48px; height: 48px; fill: none; stroke: var(--orange); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; margin: 0 auto 2rem; }
 .feature h3 { font-family: var(--font-display); font-weight: 400; font-size: 1.6rem; line-height: 1.05; text-transform: uppercase; margin-bottom: .8rem; }
-.feature p { color: var(--steel); font-size: 1.04rem; line-height: 1.6; }
+.feature p { color: var(--steel); font-size: 1.15rem; line-height: 1.6; }
 
 /* ---------- Membership ---------- */
 .plans-wrap[hidden] { display: none; }
