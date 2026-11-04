@@ -251,7 +251,7 @@
         actions: [{ label: "Book a visit", action: "scroll:#enquire", kind: "primary" }, { label: "Ask about a trial", href: waLink("Hi Muscle House! Do you offer a trial or day pass?"), kind: "wa" }] }; } },
 
     { id: "enquiry", keys: ["enquiry^2", "enquire^2", "inquiry^2", "inquire", "form^2", "callback^2", "call back^2", "contact form", "book a visit^3", "book visit^2", "appointment"],
-      reply: function () { return { text: ["The **enquiry form** asks for your name, phone number, email ID and purpose (choose **Others** to type your own). No login needed. When you submit it, WhatsApp opens with your enquiry ready. Just press **send** to deliver it to the gym.", "The website itself doesn't store your enquiry."],
+      reply: function () { return { text: ["The **enquiry form** asks for your name, phone number, purpose (choose **Others** to type your own) and a preferred time slot. No login needed. When you submit it, WhatsApp opens with your enquiry ready. Just press **send** to deliver it to the gym.", "The website itself doesn't store your enquiry."],
         actions: [{ label: "Open the enquiry form", action: "scroll:#enquire", kind: "primary" }] }; } },
 
     { id: "goals", keys: ["weight loss^3", "lose weight^3", "fat loss^3", "fat^2", "slim", "muscle gain^3", "gain muscle^3", "build muscle^3", "bulk", "strength^2", "beginner^2", "first time^2", "new to gym^3", "never been", "fitness goal^2", "tone", "abs"],
@@ -264,7 +264,7 @@
 
     { id: "website", keys: ["website^2", "site^2", "how does this work^3", "how this works^3", "how it works^2", "what can you do^3", "features^2", "help^1.5", "guide", "menu", "sections", "use this", "who are you^2", "bot", "chatbot", "assistant"],
       reply: function () { return { text: ["Here's what you can do on this website:"],
-        list: [plansHidden() ? "**Membership**: call **" + GYM.phoneDisplay + "** for plans and pricing." : "**Membership**: see plans and prices, and **Join on WhatsApp**.", "**Log in** (person icon): create an account with email or Google, and check **My membership**.", "**Training, Gallery & Reviews**: get a feel for the gym.", "**Visit**: address, map, directions and tap-to-call.", "**Enquiry form**: send your name, phone, email and purpose on WhatsApp.", "And me! I'm an automated assistant: I answer common questions instantly and pass anything else to the gym."],
+        list: [plansHidden() ? "**Membership**: call **" + GYM.phoneDisplay + "** for plans and pricing." : "**Membership**: see plans and prices, and **Join on WhatsApp**.", "**Log in** (person icon): create an account with email or Google, and check **My membership**.", "**Training, Gallery & Reviews**: get a feel for the gym.", "**Visit**: address, map, directions and tap-to-call.", "**Enquiry form**: send your name, phone, purpose and preferred time on WhatsApp.", "And me! I'm an automated assistant: I answer common questions instantly and pass anything else to the gym."],
         chips: CHIPS_START }; } },
 
     { id: "credit", keys: ["who made^3", "who built^3", "who designed^3", "developer^2", "designer^2", "website developer^3", "made this website^3", "built this website^3", "infinity^2", "web design^2", "website for my business^3", "your website"],

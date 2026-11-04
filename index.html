@@ -55,7 +55,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="preload" as="image" href="assets/img/hero.webp" fetchpriority="high">
-  <link rel="stylesheet" href="assets/css/styles.css?v=20261103-1">
+  <link rel="stylesheet" href="assets/css/styles.css?v=20261104-1">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -544,12 +544,6 @@
           </div>
 
           <div class="field">
-            <label for="f-email">Email ID <span aria-hidden="true">*</span></label>
-            <input id="f-email" name="email" type="email" inputmode="email" autocomplete="email" required maxlength="120" placeholder="you@example.com" aria-describedby="f-email-err">
-            <p class="field__error" id="f-email-err" aria-live="polite"></p>
-          </div>
-
-          <div class="field">
             <label for="f-purpose">Purpose <span aria-hidden="true">*</span></label>
             <select id="f-purpose" name="purpose" required aria-describedby="f-purpose-err">
               <option value="">Select a purpose</option>
@@ -567,6 +561,19 @@
             <label for="f-other">Please enter your purpose <span aria-hidden="true">*</span></label>
             <input id="f-other" name="other" type="text" maxlength="120" aria-describedby="f-other-err">
             <p class="field__error" id="f-other-err" aria-live="polite"></p>
+          </div>
+
+          <div class="field">
+            <label for="f-time">Preferred time slot <span aria-hidden="true">*</span></label>
+            <select id="f-time" name="time" required aria-describedby="f-time-hint f-time-err">
+              <option value="">Select a time slot</option>
+              <option>Morning (6 AM – 11 AM)</option>
+              <option>Afternoon (11 AM – 4 PM)</option>
+              <option>Evening (4 PM – 8 PM)</option>
+              <option>Night (8 PM – 10 PM)</option>
+            </select>
+            <p class="field__hint" id="f-time-hint">Gym hours: Mon – Sat 6 AM – 10 PM · Sunday 7 AM – 12 PM</p>
+            <p class="field__error" id="f-time-err" aria-live="polite"></p>
           </div>
 
           <button class="btn btn--accent btn--block btn--lg" type="submit">Submit <span class="btn__arrow" aria-hidden="true">→</span></button>
@@ -723,12 +730,12 @@
   </dialog>
 
   <script src="assets/js/config.js?v=20261031-3" defer></script>
-  <script src="assets/js/main.js?v=20261103-3" defer></script>
+  <script src="assets/js/main.js?v=20261104-1" defer></script>
   <script src="assets/vendor/supabase-2.45.4.min.js" defer></script>
   <script src="assets/js/core.js?v=20261027-2" defer></script>
   <script src="assets/js/auth.js?v=20261027-2" defer></script>
   <script src="assets/js/join.js?v=20261027-2" defer></script>
-  <script src="assets/js/chat.js?v=20261104-1" defer></script>
+  <script src="assets/js/chat.js?v=20261104-2" defer></script>
   <script src="assets/js/reviews.js?v=20261103-1" defer></script>
 </body>
 </html>

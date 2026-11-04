@@ -163,7 +163,6 @@
   if (!form) return;
   var status = form.querySelector("[data-status]");
   var purpose = form.elements.purpose, otherField = form.querySelector("[data-other]");
-  var EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
   // "Others" reveals a box to type the purpose
   function syncOther() {
@@ -196,12 +195,6 @@
       if (!normalisePhone(v)) return "Enter a valid 10-digit Indian mobile number, e.g. 98765 43210.";
       return "";
     },
-    email: function (v) {
-      v = v.trim();
-      if (!v) return "Please enter your email ID.";
-      if (!EMAIL.test(v)) return "Enter a valid email ID, e.g. you@example.com.";
-      return "";
-    },
     purpose: function (v) { return v ? "" : "Please choose a purpose."; },
     other: function (v) {
       if (purpose.value !== "Others") return "";
@@ -209,7 +202,8 @@
       if (!v) return "Please enter your purpose.";
       if (/[<>{}]/.test(v)) return "Please use plain text.";
       return "";
-    }
+    },
+    time: function (v) { return v ? "" : "Please choose a preferred time slot."; }
   };
 
   function validateField(input) {
@@ -241,13 +235,12 @@
     status.focus();
   }
 
-  // Logged-in visitors: fill in their name and email from the account.
+  // Logged-in visitors: fill in their name from the account.
   // auth.js loads after this file, so wait until all scripts have run.
   document.addEventListener("DOMContentLoaded", function () {
     if (!(window.MH && window.MH.auth)) return;
     window.MH.auth.onChange(function (u) {
       if (!u) return;
-      if (!form.elements.email.value && u.email) form.elements.email.value = u.email;
       if (!form.elements.name.value && window.MH.auth.name()) form.elements.name.value = window.MH.auth.name();
     });
   });
@@ -272,7 +265,7 @@
     var data = {
       name: form.elements.name.value.trim(),
       phone: normalisePhone(form.elements.phone.value),
-      email: form.elements.email.value.trim(),
+      time: form.elements.time.value,
       purpose: purpose.value === "Others" ? "Others: " + form.elements.other.value.trim() : purpose.value
     };
 
@@ -280,9 +273,9 @@
       "Hi Muscle House! I'd like to enquire about the gym.\n\n" +
       "Name: " + data.name + "\n" +
       "Phone: +91 " + data.phone + "\n" +
-      "Email: " + data.email + "\n" +
-      "Purpose: " + data.purpose +
-      (user && user.email && user.email.toLowerCase() !== data.email.toLowerCase() ? "\nAccount email: " + user.email : "");
+      "Purpose: " + data.purpose + "\n" +
+      "Preferred time: " + data.time +
+      (user && user.email ? "\nAccount email: " + user.email : "");
 
     var url = "https://wa.me/" + whatsappNumber() + "?text=" + encodeURIComponent(text);
     var win = window.open(url, "_blank");
