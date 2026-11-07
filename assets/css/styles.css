@@ -123,6 +123,12 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .section-head { margin-bottom: clamp(2.5rem, 6vw, 4.5rem); display: grid; gap: 1.25rem; }
 .section-head--split { grid-template-columns: 1fr; align-items: end; }
 .section-note { color: var(--steel); max-width: 26rem; font-size: .9rem; border-left: 2px solid var(--red); padding-left: 1rem; }
+/* About, Training and Atmosphere: centred headings with larger labels */
+#about .label, #training .label, #atmosphere .label { font-size: clamp(.9rem, 1.3vw, 1.1rem); color: #E8E6E1; }
+#about .label::after, #training .label::after, #atmosphere .label::after { content: ""; width: 28px; height: 2px; background: var(--orange); }
+#training .section-head, #atmosphere .section-head { justify-items: center; text-align: center; }
+#atmosphere .section-head--split { grid-template-columns: 1fr !important; }
+#atmosphere .section-note { border-left: 0; padding-left: 0; max-width: 34rem; margin-inline: auto; font-size: 1rem; }
 @media (min-width: 900px) { .section-head--split { grid-template-columns: 1.4fr 1fr; } .section-note { justify-self: end; } }
 
 /* ---------- Buttons ---------- */
@@ -366,8 +372,11 @@ button, input, select, textarea { font: inherit; color: inherit; }
     radial-gradient(55% 45% at 0% 100%, rgba(217,44,30,.22), transparent 70%);
 }
 .hero__content { position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; margin-block: auto; }
-.hero__content .eyebrow { font-size: clamp(.9rem, 1.4vw, 1.15rem); color: #E8E6E1; }
-.hero__content .eyebrow::after { content: ""; width: 28px; height: 2px; background: var(--orange); }
+/* "HSR Layout · Bengaluru": bigger and easy to spot, as a pill */
+.hero__content .eyebrow { font-size: clamp(1.05rem, 2vw, 1.5rem); font-weight: 800; letter-spacing: .2em; color: #fff;
+  padding: .55em 1.25em; border: 1.5px solid var(--orange); border-radius: 999px; background: rgba(9,9,9,.55);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); text-shadow: 0 1px 8px rgba(0,0,0,.6); }
+.hero__content .eyebrow::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 0 4px rgba(234,129,7,.22); }
 .hero__title { font-size: clamp(3.2rem, min(12.5vw, 15vh), 10.5rem); margin: 1.4rem 0 1.6rem; }
 .hero__title .line { display: block; overflow: hidden; padding-bottom: .04em; }
 .hero__title .line--accent { color: var(--orange); }
@@ -424,6 +433,13 @@ button, input, select, textarea { font: inherit; color: inherit; }
 @media (max-width: 899px) { .float-label { right: 1rem; } }
 @keyframes bob { 50% { transform: translateY(-8px); } }
 .intro__copy .display-xl { margin-top: 1.25rem; }
+/* About copy centred */
+.intro__copy { text-align: center; }
+.intro__copy .lead, .intro__copy .intro__text { margin-inline: auto; }
+.intro__copy .rule { margin-inline: auto; background: linear-gradient(90deg, var(--line-strong) 0 calc(50% - 24px), var(--red) calc(50% - 24px) calc(50% + 24px), var(--line-strong) calc(50% + 24px)); }
+.intro__copy .intro__mission { border-left: 0; border-top: 3px solid var(--orange); border-radius: 0 0 10px 10px; }
+.intro__copy .intro__where { display: block; }
+.intro__copy .intro__where svg { display: inline-block; vertical-align: -3px; margin: 0 .35rem 0 0; }
 .intro__text { margin-top: 1.1rem; color: #CFCDC8; font-size: clamp(1.05rem, 1.5vw, 1.25rem); } /* same size as the first (.lead) paragraph */
 .intro__mission { margin-top: 1.75rem; padding: 1.1rem 1.25rem; border-left: 3px solid var(--orange); background: rgba(234,129,7,.06); border-radius: 0 10px 10px 0; }
 .intro__mission-k { display: block; font-size: .7rem; font-weight: 800; letter-spacing: .22em; text-transform: uppercase; color: var(--orange); margin-bottom: .4rem; }
@@ -741,6 +757,17 @@ button, input, select, textarea { font: inherit; color: inherit; }
 @media (min-width: 640px) { .field-row { grid-template-columns: 1fr 1fr; } }
 .field { display: grid; gap: .45rem; }
 .field[hidden] { display: none; }
+/* Thank-you shown when the visitor comes back from WhatsApp */
+.form.is-done > :not([data-thanks]) { display: none !important; }
+.form__thanks { text-align: center; padding: 1.5rem .5rem; }
+.form__thanks[hidden] { display: none; }
+.form__thanks-icon { display: inline-grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; background: rgba(92,208,122,.12); border: 2px solid #5CD07A; color: #5CD07A; font-size: 1.9rem; font-weight: 800; margin-bottom: 1rem; }
+.form__thanks h3 { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.8rem, 3vw, 2.4rem); text-transform: uppercase; line-height: 1.05; color: var(--offwhite); }
+.form__thanks p { margin-top: .9rem; color: #D9D7D2; font-size: 1.05rem; }
+.form__thanks p strong { color: var(--offwhite); }
+.form__thanks-small { font-size: .9rem !important; color: var(--steel) !important; }
+.form__thanks-small a { color: var(--orange); }
+.form__thanks .btn { margin-top: 1.4rem; }
 .field label { font-size: .72rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: #D9D7D2; }
 .field label span[aria-hidden] { color: var(--red-text); }
 .field .optional { color: var(--steel); text-transform: none; letter-spacing: .02em; font-weight: 500; }

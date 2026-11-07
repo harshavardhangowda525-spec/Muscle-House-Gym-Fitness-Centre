@@ -146,7 +146,7 @@ The chat button in the bottom-right corner opens an **automated FAQ assistant**.
 
 ## Enquiry form: how it works
 
-The form has four fields: **Name**, **Phone number** (10-digit Indian mobile), **Purpose** (a drop-down where **Others** reveals a box to type it) and **Preferred time slot**: Morning 6–11 AM, Afternoon 11 AM–4 PM, Evening 4–8 PM or Night 8–10 PM, all within gym hours, with a note that Sunday is 7 AM–12 PM. The browser validates them, and logged-in visitors get their name filled in. When the visitor submits, it **opens WhatsApp with the enquiry pre-filled** to `+91 63633 42090`.
+The form has four fields: **Name**, **Phone number** (10-digit Indian mobile), **Purpose** (a drop-down where **Others** reveals a box to type it) and **Preferred time**: pick Morning (6 AM–12 PM), Afternoon (12–4 PM), Evening (4–8 PM) or Night (8–10 PM), then an hourly **Time slot** within it (e.g. 7 AM – 8 AM). A note shows that Sunday is 7 AM–12 PM. When the visitor comes back from WhatsApp, the form is replaced by a thank-you message. The browser validates them, and logged-in visitors get their name filled in. When the visitor submits, it **opens WhatsApp with the enquiry pre-filled** to `+91 63633 42090`.
 
 - Nothing is sent until the visitor presses **send in WhatsApp**, and the page says so clearly. It never shows a fake "message sent" confirmation.
 - The website stores and transmits no personal data itself.

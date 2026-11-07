@@ -203,8 +203,26 @@
       if (/[<>{}]/.test(v)) return "Please use plain text.";
       return "";
     },
-    time: function (v) { return v ? "" : "Please choose a preferred time slot."; }
+    time: function (v) { return v ? "" : "Please choose a preferred time."; },
+    slot: function (v) { return !form.elements.time.value || v ? "" : "Please choose a time slot."; }
   };
+
+  // Preferred time: pick Morning/Afternoon/Evening/Night, then an hourly slot within gym hours
+  var SLOTS = { Morning: [6, 12], Afternoon: [12, 16], Evening: [16, 20], Night: [20, 22] };
+  function hourLabel(h) { return (h % 12 || 12) + (h < 12 || h === 24 ? " AM" : " PM"); }
+  var timeSel = form.elements.time, slotSel = form.elements.slot, slotField = form.querySelector("[data-slot-field]");
+  function fillSlots() {
+    var range = SLOTS[timeSel.value];
+    slotSel.innerHTML = '<option value="">Select a slot</option>';
+    slotField.hidden = !range; slotSel.required = !!range;
+    if (!range) return;
+    for (var h = range[0]; h < range[1]; h++) {
+      var o = document.createElement("option");
+      o.textContent = o.value = hourLabel(h) + " – " + hourLabel(h + 1);
+      slotSel.appendChild(o);
+    }
+  }
+  timeSel.addEventListener("change", fillSlots);
 
   function validateField(input) {
     var rule = rules[input.name];
@@ -245,6 +263,35 @@
     });
   });
 
+  /* ---------- Thank-you after the visitor returns from WhatsApp ---------- */
+  var thanks = form.querySelector("[data-thanks]"), pending = null;
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function showThanks() {
+    var p = pending; pending = null;
+    var first = p.name.split(/\s+/)[0];
+    thanks.innerHTML =
+      '<span class="form__thanks-icon" aria-hidden="true">✓</span>' +
+      "<h3>Thank you, " + esc(first) + "!</h3>" +
+      "<p>We've received your enquiry. Our team will contact you soon on <strong>+91 " + esc(p.phone.replace(/(\d{5})(\d{5})/, "$1 $2")) + "</strong>" +
+      (p.time ? ", in your preferred slot: <strong>" + esc(p.time) + "</strong>" : "") + ".</p>" +
+      '<p class="form__thanks-small">Didn\'t press send in WhatsApp? <a href="' + esc(p.url) + '" target="_blank" rel="noopener">Open WhatsApp again</a> or call <a href="tel:+916363342090">063633 42090</a>.</p>' +
+      '<button class="btn btn--ghost btn--sm" type="button" data-thanks-reset>Send another enquiry</button>';
+    form.classList.add("is-done"); thanks.hidden = false; status.hidden = true;
+    thanks.focus({ preventScroll: true });
+  }
+  function onReturn() {
+    if (!pending || document.visibilityState !== "visible") return;
+    if (Date.now() - pending.t < 1500) return; // ignore the instant re-focus when WhatsApp didn't take over
+    showThanks();
+  }
+  document.addEventListener("visibilitychange", onReturn);
+  window.addEventListener("focus", onReturn);
+  thanks.addEventListener("click", function (e) {
+    if (!e.target.closest("[data-thanks-reset]")) return;
+    form.reset(); syncOther(); fillSlots(); form.classList.remove("is-done"); thanks.hidden = true; status.hidden = true;
+    form.elements.name.focus();
+  });
+
   form.addEventListener("submit", function (e) {
     e.preventDefault();
     var firstInvalid = null;
@@ -265,7 +312,7 @@
     var data = {
       name: form.elements.name.value.trim(),
       phone: normalisePhone(form.elements.phone.value),
-      time: form.elements.time.value,
+      time: form.elements.time.value + ", " + form.elements.slot.value,
       purpose: purpose.value === "Others" ? "Others: " + form.elements.other.value.trim() : purpose.value
     };
 
@@ -282,6 +329,8 @@
     if (win) { try { win.opener = null; } catch (err) { /* ignore */ } }
 
     // Honest status: the enquiry is only delivered once the visitor presses send in WhatsApp.
+    // When they come back to the site from WhatsApp, show a thank-you instead of the form.
+    if (win) pending = { t: Date.now(), name: data.name, phone: data.phone, time: data.time, url: url };
     if (win) {
       showStatus("success",
         "<strong>WhatsApp should now be open with your enquiry.</strong>" +
