@@ -218,6 +218,11 @@
         callback: onGoogleCredential,
         nonce: hex(new Uint8Array(digest)), // Google signs the hash; Supabase checks it against rawNonce
         ux_mode: "popup",
+        // Chrome (Android + desktop): the browser's own account picker over the page, no popup or new tab.
+        // Browsers without FedCM (e.g. Safari on iPhone) fall back to the popup automatically.
+        use_fedcm_for_button: true,
+        use_fedcm_for_prompt: true,
+        itp_support: true,
         auto_select: false,
         context: "signin"
       });
