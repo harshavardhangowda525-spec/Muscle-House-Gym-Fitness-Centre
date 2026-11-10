@@ -70,8 +70,8 @@ After pulling this version, do these once:
 1. **Update the database:** SQL Editor → New query → paste all of `supabase/schema.sql` → Run. It's safe to re-run, and existing members, prices and your admin login are kept.
 2. **Allow sign-ups:** Authentication → Sign In / Providers → turn **on** *Allow new users to sign up*.
 3. **No email confirmation:** on the same page, open **Email** → turn **off** *Confirm email* → Save.
-4. **Site address:** Authentication → URL Configuration → *Site URL* = `https://harshavardhangowda525-spec.github.io/Muscle-House-Gym-Fitness-Centre/`. Under *Redirect URLs*, add `https://harshavardhangowda525-spec.github.io/Muscle-House-Gym-Fitness-Centre/**`.
-5. **Google:** create an OAuth client in Google Cloud (Web application). Set *Authorized JavaScript origins* to `https://harshavardhangowda525-spec.github.io` and *Authorized redirect URIs* to `https://<project-ref>.supabase.co/auth/v1/callback`. Paste the Client ID and Client Secret into Supabase → Authentication → Sign In / Providers → **Google** → Enable → Save.
+4. **Site address:** Authentication → URL Configuration → *Site URL* = `https://musclehousegym.in`. Under *Redirect URLs*, add `https://musclehousegym.in/**` and `https://www.musclehousegym.in/**` (keep the GitHub Pages address too while testing).
+5. **Google:** create an OAuth client in Google Cloud (Web application). Set *Authorized JavaScript origins* to `https://musclehousegym.in` and `https://www.musclehousegym.in` (plus the GitHub Pages address while testing) and *Authorized redirect URIs* to `https://<project-ref>.supabase.co/auth/v1/callback`. Paste the Client ID and Client Secret into Supabase → Authentication → Sign In / Providers → **Google** → Enable → Save.
 
 **Google sign-in without the supabase.co page:** set `googleClientId` in `assets/js/config.js` to the OAuth **Client ID** (Google Cloud → Google Auth Platform → Clients; it ends in `.apps.googleusercontent.com`; never use the Client *Secret* here). The login screen then shows Google's own button, which opens a Google popup over the website. Supabase verifies the result in the background, so visitors never land on `supabase.co`. Google shows the app name from **Branding** and the website's address. In Supabase → Authentication → Sign In / Providers → Google, the same Client ID must be listed under **Client IDs**. If Google's script is blocked, or no Client ID is set, the site falls back to the redirect flow.
 
@@ -124,6 +124,10 @@ When the widget appears, the saved rating and quote cards hide automatically, an
 - **3 Nov 2026:**
   - **Enquiry form:** no longer needs a login.
   - **Google rating:** the rating and review count update automatically from Trustindex.
+
+## Live domain: musclehousegym.in
+
+The site's link-preview tags, canonical URL and structured data use `https://musclehousegym.in/`.
 
 ## Moving to a new domain
 
