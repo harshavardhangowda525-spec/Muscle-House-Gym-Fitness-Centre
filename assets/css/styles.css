@@ -697,6 +697,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .quote figcaption { margin-top: auto; font-size: .72rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--steel); display: flex; align-items: center; gap: .6rem; }
 .quote figcaption::before { content: "G"; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--line-strong); font-size: .7rem; letter-spacing: 0; color: var(--offwhite); }
 .reviews__widget { min-height: 120px; }
+.reviews__widget.is-pending { min-height: 0; height: 1px; overflow: hidden; opacity: 0; pointer-events: none; margin: 0; }
 .reviews [hidden] { display: none !important; }
 .reviews__foot { margin-top: 2rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; color: var(--steel); font-size: .85rem; }
 

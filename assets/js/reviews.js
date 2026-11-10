@@ -48,14 +48,18 @@
 
   var saved = [section.querySelector(".score"), section.querySelector(".quotes"), section.querySelector("[data-reviews-note]")];
 
-  // Trustindex first inserts an empty placeholder; wait for the real widget (.ti-widget)
-  function ready() { return !!slot.querySelector(".ti-widget"); }
+  // Trustindex first inserts an empty placeholder, and it can also send a notice instead of
+  // reviews (e.g. "trial expired"). Only a real widget with at least one review counts.
+  function ready() { var w = slot.querySelector(".ti-widget"); return !!w && !!w.querySelector(".ti-name, .ti-review-item"); }
   function rendered() {
     if (!ready()) return false;
+    slot.classList.remove("is-pending");
     saved.forEach(function (el) { if (el) el.hidden = true; });
     return true;
   }
 
+  // Keep the slot invisible (but in the page, so Trustindex can lazy-load) until reviews arrive
+  slot.classList.add("is-pending");
   slot.hidden = false;
   var observer = new MutationObserver(function () { if (rendered()) observer.disconnect(); });
   observer.observe(slot, { childList: true, subtree: true });
